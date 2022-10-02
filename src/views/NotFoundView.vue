@@ -1,9 +1,5 @@
 <template>
-  <div>
-    <router-link to="/">Home</router-link>
-    <router-link to="/about">About</router-link>
-    <router-view></router-view>
-  </div>
+  <div>{{ title }}</div>
 </template>
 
 <script lang="ts">
@@ -12,7 +8,7 @@ import { defineComponent } from "vue";
 export default defineComponent({
   setup() {
     return {
-      gg: 1,
+      title: "Страница не найдена",
     };
   },
 });
