@@ -19,8 +19,8 @@
           </v-col>
           <v-col cols="auto">
             <v-btn variant="tonal" icon="mdi-cart-variant"></v-btn>
-            <v-btn variant="tonal" icon="mdi-cart-check"></v-btn>
-            <v-btn variant="tonal" icon="mdi-cart-arrow-down"></v-btn>
+            <!-- <v-btn variant="tonal" icon="mdi-cart-check"></v-btn>
+            <v-btn variant="tonal" icon="mdi-cart-arrow-down"></v-btn> -->
           </v-col>
         </v-row>
       </v-container>
@@ -28,19 +28,9 @@
 
     <v-navigation-drawer v-model="isVisibleViewMenu" temporary>
       <v-list density="compact" nav>
-        <v-list-item
-          prepend-icon="mdi-view-dashboard"
-          title="Home"
-          value="home"
-          to="/"
-        >
+        <v-list-item prepend-icon="mdi-view-dashboard" title="Каталог" to="/">
         </v-list-item>
-        <v-list-item
-          prepend-icon="mdi-forum"
-          title="About"
-          value="about"
-          to="about"
-        >
+        <v-list-item prepend-icon="mdi-forum" title="О компании" to="about">
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
@@ -49,7 +39,7 @@
       <v-container><router-view /></v-container>
     </v-main>
 
-    <v-footer app>
+    <v-footer app absolute>
       <v-container>Footer</v-container>
     </v-footer>
   </v-app>
@@ -69,4 +59,8 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+.v-container {
+  max-width: 1280px;
+}
+</style>

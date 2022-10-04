@@ -1,5 +1,7 @@
 <template>
-  <div>{{ title }}</div>
+  <v-layout>
+    <h1>{{ title }}</h1>
+  </v-layout>
 </template>
 
 <script lang="ts">
