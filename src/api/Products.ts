@@ -1,13 +1,13 @@
-import products from "@/assets/moks/products";
-import { Product } from "@/types";
+import {
+  GetProductsResponse,
+  getProductsRequest,
+} from "@/assets/moks/requestProductsApi";
 
 export function getProducts(
   page = 1,
   sort = "id",
   order = "ASC",
   filters = {}
-): Promise<Product[]> {
-  return new Promise((resolve) => {
-    resolve(products);
-  });
+): Promise<GetProductsResponse> {
+  return getProductsRequest(page, sort, order, filters);
 }

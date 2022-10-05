@@ -66,11 +66,20 @@
         </v-hover>
       </v-col>
     </v-row>
+
+    <div class="text-center mt-10">
+      <v-pagination
+        v-model="currentPage"
+        :length="totalPages"
+        prev-icon="mdi-menu-left"
+        next-icon="mdi-menu-right"
+      ></v-pagination>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref, watch } from "vue";
 import { getProducts } from "@/api/Products";
 import { Product } from "@/types";
 
@@ -82,16 +91,28 @@ export default defineComponent({
     const cartStore = useCartStore();
     const wishlistStore = useWishlistStore();
 
+    const currentPage = ref(1);
+    const totalPages = ref(0);
     const products = ref([] as Product[]);
-    getProducts().then((prod) => {
-      products.value = [...prod];
-    });
+    loadProducts();
+
+    function loadProducts(): void {
+      getProducts(currentPage.value).then((prod) => {
+        products.value = [...prod.products];
+        totalPages.value = prod.totalPages;
+      });
+    }
+
+    watch(currentPage, loadProducts);
 
     return {
       cartStore,
       wishlistStore,
       title: "Каталог",
       products,
+
+      currentPage,
+      totalPages,
     };
   },
 });
