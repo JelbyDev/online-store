@@ -39,15 +39,25 @@
               <v-spacer></v-spacer>
 
               <v-btn
+                @click="wishlistStore.toggleProduct(product.id)"
+                :color="
+                  wishlistStore.checkProduct(product.id)
+                    ? 'green'
+                    : 'surface-variant'
+                "
                 size="small"
-                color="surface-variant"
                 variant="tonal"
                 icon="mdi-heart"
               ></v-btn>
 
               <v-btn
+                @click="cartStore.addProduct(product.id)"
+                :color="
+                  cartStore.checkProduct(product.id)
+                    ? 'green'
+                    : 'surface-variant'
+                "
                 size="small"
-                color="surface-variant"
                 variant="tonal"
                 icon="mdi-cart-arrow-down"
               ></v-btn>
@@ -62,16 +72,24 @@
 <script lang="ts">
 import { defineComponent, ref } from "vue";
 import { getProducts } from "@/api/Products";
-import { IProduct } from "@/types";
+import { Product } from "@/types";
+
+import { useCartStore } from "@/stores/cart";
+import { useWishlistStore } from "@/stores/wishlist";
 
 export default defineComponent({
   setup() {
-    const products = ref([] as IProduct[]);
+    const cartStore = useCartStore();
+    const wishlistStore = useWishlistStore();
+
+    const products = ref([] as Product[]);
     getProducts().then((prod) => {
       products.value = [...prod];
     });
 
     return {
+      cartStore,
+      wishlistStore,
       title: "Каталог",
       products,
     };

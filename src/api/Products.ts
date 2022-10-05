@@ -1,12 +1,12 @@
 import products from "@/assets/moks/products";
-import { IProduct } from "@/types";
+import { Product } from "@/types";
 
 export function getProducts(
   page = 1,
   sort = "id",
   order = "ASC",
   filters = {}
-): Promise<IProduct[]> {
+): Promise<Product[]> {
   return new Promise((resolve) => {
     resolve(products);
   });

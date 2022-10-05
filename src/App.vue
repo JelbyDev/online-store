@@ -2,9 +2,9 @@
   <v-app>
     <v-app-bar>
       <v-container>
-        <v-row no-gutters justify="space-between" align="center">
+        <v-row no-gutters class="justify-space-between align-center">
           <v-col cols="auto">
-            <v-row no-gutters align="center">
+            <v-row no-gutters class="align-center">
               <v-app-bar-nav-icon
                 @click.stop="isVisibleViewMenu = !isVisibleViewMenu"
               ></v-app-bar-nav-icon>
@@ -18,7 +18,9 @@
             </v-row>
           </v-col>
           <v-col cols="auto">
-            <v-btn variant="tonal" icon="mdi-cart-variant"></v-btn>
+            <v-btn variant="tonal" prepend-icon="mdi-cart-variant">{{
+              cartStore.getQuantityProducts()
+            }}</v-btn>
             <!-- <v-btn variant="tonal" icon="mdi-cart-check"></v-btn>
             <v-btn variant="tonal" icon="mdi-cart-arrow-down"></v-btn> -->
           </v-col>
@@ -48,11 +50,16 @@
 <script lang="ts">
 import { defineComponent, ref } from "vue";
 
+import { useCartStore } from "@/stores/cart";
+
 export default defineComponent({
   setup() {
+    const cartStore = useCartStore();
+
     const isVisibleViewMenu = ref(false);
 
     return {
+      cartStore,
       isVisibleViewMenu,
     };
   },
