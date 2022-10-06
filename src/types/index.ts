@@ -9,3 +9,8 @@ export interface Product {
   price: number;
   isPopular: boolean;
 }
+
+export interface SortingElement {
+  title: string;
+  value: string;
+}

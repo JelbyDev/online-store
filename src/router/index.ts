@@ -1,23 +1,23 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
-import CatalogView from "@/views/CatalogView.vue";
-import AboutView from "@/views/AboutView.vue";
-import NotFoundView from "@/views/NotFoundView.vue";
+import CatalogPage from "@/pages/CatalogPage.vue";
+import AboutPage from "@/pages/AboutPage.vue";
+import NotFoundPage from "@/pages/NotFoundPage.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: "",
     name: "catalog",
-    component: CatalogView,
+    component: CatalogPage,
   },
   {
     path: "/about",
     name: "about",
-    component: AboutView,
+    component: AboutPage,
   },
   {
     path: "/:catchAll(.*)",
     name: "not-found",
-    component: NotFoundView,
+    component: NotFoundPage,
   },
 ];
 

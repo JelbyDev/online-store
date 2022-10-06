@@ -21,8 +21,6 @@
             <v-btn variant="tonal" prepend-icon="mdi-cart-variant">{{
               cartStore.getQuantityProducts()
             }}</v-btn>
-            <!-- <v-btn variant="tonal" icon="mdi-cart-check"></v-btn>
-            <v-btn variant="tonal" icon="mdi-cart-arrow-down"></v-btn> -->
           </v-col>
         </v-row>
       </v-container>

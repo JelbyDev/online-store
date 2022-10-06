@@ -1,6 +1,17 @@
 <template>
   <div>
-    <h1 class="text-h3">{{ title }}</h1>
+    <h1 class="text-h3">Каталог</h1>
+
+    <div>
+      <v-select
+        v-model="selectedSorting"
+        :items="sortingElements"
+        item-title="title"
+        item-value="value"
+        label="Сортировка по:"
+        variant="outlined"
+      ></v-select>
+    </div>
 
     <v-row class="mt-3">
       <v-col
@@ -80,8 +91,8 @@
 
 <script lang="ts">
 import { defineComponent, ref, watch } from "vue";
-import { getProducts } from "@/api/Products";
-import { Product } from "@/types";
+import { getProducts, getSortingProductElements } from "@/api/Products";
+import { Product, SortingElement } from "@/types";
 
 import { useCartStore } from "@/stores/cart";
 import { useWishlistStore } from "@/stores/wishlist";
@@ -91,13 +102,22 @@ export default defineComponent({
     const cartStore = useCartStore();
     const wishlistStore = useWishlistStore();
 
+    const products = ref([] as Product[]);
+
     const currentPage = ref(1);
     const totalPages = ref(0);
-    const products = ref([] as Product[]);
-    loadProducts();
+
+    const sortingElements = ref([] as SortingElement[]);
+    const selectedSorting = ref("");
+
+    getSortingProductElements().then((sElements) => {
+      sortingElements.value = [...sElements];
+      selectedSorting.value = sElements[0].value;
+      watch(selectedSorting, loadProducts);
+    });
 
     function loadProducts(): void {
-      getProducts(currentPage.value).then((prod) => {
+      getProducts(currentPage.value, selectedSorting.value).then((prod) => {
         products.value = [...prod.products];
         totalPages.value = prod.totalPages;
       });
@@ -105,10 +125,14 @@ export default defineComponent({
 
     watch(currentPage, loadProducts);
 
+    loadProducts();
+
     return {
       cartStore,
       wishlistStore,
-      title: "Каталог",
+
+      sortingElements,
+      selectedSorting,
       products,
 
       currentPage,
