@@ -2,23 +2,33 @@
   <div>
     <h1 class="text-h3">Каталог</h1>
 
-    <div>
-      <v-select
-        v-model="selectedSorting"
-        :items="sortingElements"
-        item-title="title"
-        item-value="value"
-        label="Сортировка по:"
-        variant="outlined"
-      ></v-select>
-    </div>
+    <v-row class="mt-3">
+      <v-col cols="6" md="4">
+        <v-select
+          v-model="selectedSorting"
+          :items="sortingElements"
+          item-title="title"
+          item-value="value"
+          label="Сортировка по:"
+          variant="outlined"
+        ></v-select>
+      </v-col>
+      <v-col cols="6" md="8">
+        <v-text-field
+          v-model.trim="searchQuery"
+          label="Поиск по названию товара"
+          variant="outlined"
+          clearable
+        ></v-text-field>
+      </v-col>
+    </v-row>
 
     <v-row class="mt-3">
       <v-col
         v-for="product in products"
         :key="product.id"
         cols="12"
-        sm="5"
+        sm="6"
         md="4"
         lg="3"
       >
@@ -91,8 +101,8 @@
 
 <script lang="ts">
 import { defineComponent, ref, watch } from "vue";
-import { getProducts, getSortingProductElements } from "@/api/Products";
-import { Product, SortingElement } from "@/types";
+import { getProducts } from "@/api/Products";
+import { Product } from "@/types";
 
 import { useCartStore } from "@/stores/cart";
 import { useWishlistStore } from "@/stores/wishlist";
@@ -107,33 +117,38 @@ export default defineComponent({
     const currentPage = ref(1);
     const totalPages = ref(0);
 
-    const sortingElements = ref([] as SortingElement[]);
-    const selectedSorting = ref("");
+    const sortingElements = ref([
+      { title: "Названию А-Я", value: "name--ASC" },
+      { title: "Названию Я-A", value: "name--DESC" },
+      { title: "Цене ▲", value: "price--ASC" },
+      { title: "Цене ▼", value: "price--DESC" },
+    ]);
+    const selectedSorting = ref(sortingElements.value[0].value);
+    const searchQuery = ref("");
 
-    getSortingProductElements().then((sElements) => {
-      sortingElements.value = [...sElements];
-      selectedSorting.value = sElements[0].value;
-      watch(selectedSorting, loadProducts);
-    });
+    watch([currentPage, searchQuery, selectedSorting], loadProducts);
 
     function loadProducts(): void {
-      getProducts(currentPage.value, selectedSorting.value).then((prod) => {
+      getProducts(
+        currentPage.value,
+        selectedSorting.value,
+        searchQuery.value
+      ).then((prod) => {
         products.value = [...prod.products];
         totalPages.value = prod.totalPages;
       });
     }
-
-    watch(currentPage, loadProducts);
-
     loadProducts();
 
     return {
       cartStore,
       wishlistStore,
 
+      products,
+
+      searchQuery,
       sortingElements,
       selectedSorting,
-      products,
 
       currentPage,
       totalPages,

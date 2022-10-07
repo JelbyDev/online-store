@@ -1,5 +1,5 @@
 import products from "@/assets/moks/products";
-import { Product, SortingElement } from "@/types";
+import { Product } from "@/types";
 
 const PRODUCTS_PER_PAGE = 8;
 
@@ -8,28 +8,26 @@ export interface GetProductsResponse {
   products: Product[];
 }
 
-export function getSortingProductElementsRequest(): Promise<SortingElement[]> {
-  return new Promise((resolve) => {
-    resolve([
-      { title: "Названию А-Я", value: "name--ASC" },
-      { title: "Названию Я-A", value: "name--DESC" },
-      { title: "Цене ▲", value: "price--ASC" },
-      { title: "Цене ▼", value: "price--DESC" },
-    ]);
-  });
-}
-
 export function getProductsRequest(
   page: number,
   sort: string,
+  search = "",
   filters = {}
 ): Promise<GetProductsResponse> {
   return new Promise((resolve) => {
-    const totalPages = Math.ceil(products.length / PRODUCTS_PER_PAGE);
+    // const filteredProducts = filterProducts();
+
+    const searchedProducts = searchProducts(search, products);
+    const filteredProducts = searchedProducts;
+
+    const totalPages = Math.ceil(filteredProducts.length / PRODUCTS_PER_PAGE);
     const startProdIndex = (page - 1) * PRODUCTS_PER_PAGE;
     const endProdIndex = startProdIndex + PRODUCTS_PER_PAGE;
 
-    const limitedProducts = products.slice(startProdIndex, endProdIndex);
+    const limitedProducts = filteredProducts.slice(
+      startProdIndex,
+      endProdIndex
+    );
     const sortedProducts = sortProducts(sort, limitedProducts);
 
     resolve({
@@ -37,6 +35,11 @@ export function getProductsRequest(
       products: sortedProducts,
     });
   });
+}
+
+function searchProducts(searchQuery: string, products: Product[]): Product[] {
+  if (!searchQuery) return products;
+  return products.filter((product) => product.name.includes(searchQuery));
 }
 
 function sortProducts(sort: string, products: Product[]): Product[] {
