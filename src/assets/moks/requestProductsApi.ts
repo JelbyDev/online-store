@@ -1,7 +1,7 @@
 import products from "@/assets/moks/products";
 import { Product } from "@/types";
 
-const PRODUCTS_PER_PAGE = 8;
+const PRODUCTS_PER_PAGE = 9;
 
 export interface GetProductsResponse {
   totalPages: number;
@@ -15,10 +15,8 @@ export function getProductsRequest(
   filters = {}
 ): Promise<GetProductsResponse> {
   return new Promise((resolve) => {
-    // const filteredProducts = filterProducts();
-
     const searchedProducts = searchProducts(search, products);
-    const filteredProducts = searchedProducts;
+    const filteredProducts = filterProducts(filters, searchedProducts);
 
     const totalPages = Math.ceil(filteredProducts.length / PRODUCTS_PER_PAGE);
     const startProdIndex = (page - 1) * PRODUCTS_PER_PAGE;
@@ -38,8 +36,39 @@ export function getProductsRequest(
 }
 
 function searchProducts(searchQuery: string, products: Product[]): Product[] {
-  if (!searchQuery) return products;
+  if (!searchQuery) return [...products];
   return products.filter((product) => product.name.includes(searchQuery));
+}
+
+function filterProducts(
+  filters: { [index: string]: Array<string> },
+  products: Product[]
+): Product[] {
+  let returnProducts = [...products];
+
+  if (filters.popular.length === 1) {
+    returnProducts = returnProducts.filter((product) => product.isPopular);
+  }
+
+  if (filters.color.length > 0) {
+    returnProducts = returnProducts.filter((product) =>
+      filters.color.includes(product.color)
+    );
+  }
+
+  if (filters.category.length > 0) {
+    returnProducts = returnProducts.filter((product) =>
+      filters.category.includes(product.category)
+    );
+  }
+
+  if (filters.size.length > 0) {
+    returnProducts = returnProducts.filter((product) =>
+      filters.size.includes(product.size)
+    );
+  }
+
+  return returnProducts;
 }
 
 function sortProducts(sort: string, products: Product[]): Product[] {
