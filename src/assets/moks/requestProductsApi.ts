@@ -1,7 +1,6 @@
-import products from "@/assets/moks/products";
 import { Product } from "@/types";
-
-const PRODUCTS_PER_PAGE = 9;
+import products from "@/assets/moks/products";
+import { PRODUCTS_PER_PAGE } from "@/assets/moks/constants";
 
 export interface GetProductsResponse {
   totalPages: number;

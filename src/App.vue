@@ -32,6 +32,12 @@
         </v-list-item>
         <v-list-item prepend-icon="mdi-forum" title="О компании" to="about">
         </v-list-item>
+        <v-list-item
+          prepend-icon="mdi-heart"
+          title="Избранные товары"
+          to="wishlist"
+        >
+        </v-list-item>
       </v-list>
     </v-navigation-drawer>
 

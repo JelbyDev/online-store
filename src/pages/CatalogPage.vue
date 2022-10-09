@@ -54,69 +54,12 @@
         </v-expansion-panels>
       </v-col>
       <v-col cols="9">
-        <v-row>
-          <v-col
-            v-for="product in products"
-            :key="product.id"
-            cols="12"
-            sm="6"
-            md="4"
-          >
-            <v-hover v-slot="{ isHovering, props }">
-              <v-card
-                :elevation="isHovering ? 5 : 2"
-                :class="{ 'on-hover': isHovering }"
-                class="rounded-lg"
-                v-bind="props"
-              >
-                <v-img
-                  :src="product.img"
-                  height="270"
-                  position="center center"
-                  cover
-                >
-                  <v-overlay
-                    :model-value="isHovering"
-                    contained
-                    class="align-center justify-center"
-                  >
-                    <v-btn prepend-icon="mdi-magnify" flat>Подробнее</v-btn>
-                  </v-overlay>
-                </v-img>
-
-                <v-card-title>{{ product.price }} руб.</v-card-title>
-                <v-card-subtitle>{{ product.name }}</v-card-subtitle>
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-
-                  <v-btn
-                    @click="wishlistStore.toggleProduct(product.id)"
-                    :color="
-                      wishlistStore.checkProduct(product.id)
-                        ? 'green'
-                        : 'surface-variant'
-                    "
-                    size="small"
-                    variant="tonal"
-                    icon="mdi-heart"
-                  ></v-btn>
-
-                  <v-btn
-                    @click="cartStore.addProduct(product.id)"
-                    :color="
-                      cartStore.checkProduct(product.id)
-                        ? 'green'
-                        : 'surface-variant'
-                    "
-                    size="small"
-                    variant="tonal"
-                    icon="mdi-cart-arrow-down"
-                  ></v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-hover>
-          </v-col>
-        </v-row>
+        <product-list
+          :products="products"
+          :grid-cools="12"
+          :grid-sm="6"
+          :grid-md="4"
+        ></product-list>
 
         <div class="text-center mt-10">
           <v-pagination
@@ -132,18 +75,15 @@
 </template>
 
 <script lang="ts">
+import { Product } from "@/types";
 import { defineComponent, reactive, ref, watch, onMounted } from "vue";
 import { getProducts } from "@/api/Products";
-import { Product } from "@/types";
 
-import { useCartStore } from "@/stores/cart";
-import { useWishlistStore } from "@/stores/wishlist";
+import ProductList from "@/components/ProductList.vue";
 
 export default defineComponent({
+  components: { ProductList },
   setup() {
-    const cartStore = useCartStore();
-    const wishlistStore = useWishlistStore();
-
     const products = ref([] as Product[]);
 
     const currentPage = ref(1);
@@ -221,9 +161,6 @@ export default defineComponent({
     });
 
     return {
-      cartStore,
-      wishlistStore,
-
       products,
 
       searchQuery,
@@ -241,18 +178,4 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss">
-.v-card {
-  cursor: pointer;
-
-  .v-img__img {
-    transition: transform 0.5s;
-  }
-
-  &.on-hover {
-    & .v-img__img {
-      transform: scale(1.2);
-    }
-  }
-}
-</style>
+<style lang="scss"></style>

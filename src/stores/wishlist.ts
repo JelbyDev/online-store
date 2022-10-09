@@ -21,5 +21,9 @@ export const useWishlistStore = defineStore("wishlist", () => {
     return false;
   }
 
-  return { toggleProduct, checkProduct };
+  function getProducts(): number[] {
+    return Object.keys(products).map((product) => +product);
+  }
+
+  return { getProducts, toggleProduct, checkProduct };
 });
