@@ -1,12 +1,12 @@
 import { defineStore } from "pinia";
-import { reactive } from "vue";
-
-interface WishlistProduct {
-  [index: number]: boolean;
-}
+import { reactive, watch } from "vue";
+import { setItemInStorage, getItemFromStorage } from "@/utils/Storage";
 
 export const useWishlistStore = defineStore("wishlist", () => {
-  const products = reactive({} as WishlistProduct);
+  const storageProducts = getItemFromStorage("wishlistProducts");
+  const defaultProducts = storageProducts ? JSON.parse(storageProducts) : {};
+
+  const products = reactive(defaultProducts);
 
   function toggleProduct(productId: number): void {
     if (products[productId]) {
@@ -21,9 +21,13 @@ export const useWishlistStore = defineStore("wishlist", () => {
     return false;
   }
 
-  function getProducts(): number[] {
+  function getProductsId(): number[] {
     return Object.keys(products).map((product) => +product);
   }
 
-  return { getProducts, toggleProduct, checkProduct };
+  watch(products, () =>
+    setItemInStorage("wishlistProducts", JSON.stringify(products))
+  );
+
+  return { getProductsId, toggleProduct, checkProduct };
 });

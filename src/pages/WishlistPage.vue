@@ -27,7 +27,7 @@ export default defineComponent({
     const products = ref([] as Product[]);
 
     onMounted(() => {
-      getWishlistProducts(wishlistStore.getProducts()).then(
+      getWishlistProducts(wishlistStore.getProductsId()).then(
         (prod) => (products.value = [...prod])
       );
     });
