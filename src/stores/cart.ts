@@ -1,12 +1,12 @@
 import { defineStore } from "pinia";
-import { reactive } from "vue";
-
-interface CartProduct {
-  [index: number]: number;
-}
+import { reactive, watch } from "vue";
+import { setItemInStorage, getItemFromStorage } from "@/utils/Storage";
 
 export const useCartStore = defineStore("cart", () => {
-  const products = reactive({} as CartProduct);
+  const storageProducts = getItemFromStorage("cartProducts");
+  const defaultProducts = storageProducts ? JSON.parse(storageProducts) : {};
+
+  const products = reactive(defaultProducts);
 
   function addProduct(productId: number): void {
     if (products[productId]) {
@@ -26,12 +26,16 @@ export const useCartStore = defineStore("cart", () => {
   }
 
   function getQuantityProducts(): number {
-    const productsQuantity = Object.values(products);
+    const productsQuantity: Array<number> = Object.values(products);
     if (!productsQuantity) return 0;
     return productsQuantity.reduce((totalQuantities, count) => {
       return (totalQuantities += +count);
     }, 0);
   }
+
+  watch(products, () =>
+    setItemInStorage("cartProducts", JSON.stringify(products))
+  );
 
   return { addProduct, removeProduct, checkProduct, getQuantityProducts };
 });
