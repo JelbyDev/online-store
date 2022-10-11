@@ -13,18 +13,22 @@
           :class="{ 'on-hover': isHovering }"
           class="rounded-lg"
           v-bind="props"
+          :href="`#/product/${product.id}`"
         >
           <v-img :src="product.img" height="270" position="center center" cover>
-            <v-overlay
+            <!--<v-overlay
               :model-value="isHovering"
               contained
               class="align-center justify-center"
             >
               <v-btn prepend-icon="mdi-magnify" flat>Подробнее</v-btn>
-            </v-overlay>
+            </v-overlay> -->
           </v-img>
 
-          <v-card-title>{{ product.price }} руб.</v-card-title>
+          <v-card-title>
+            <app-formatted-price :price="product.price"></app-formatted-price>
+          </v-card-title>
+
           <v-card-subtitle>{{ product.name }}</v-card-subtitle>
           <v-card-actions>
             <v-spacer></v-spacer>
@@ -32,7 +36,7 @@
             <v-btn
               @click="wishlistStore.toggleProduct(product.id)"
               :color="
-                wishlistStore.checkProduct(product.id)
+                wishlistStore.isInWishlist(product.id)
                   ? 'green'
                   : 'surface-variant'
               "
@@ -44,7 +48,7 @@
             <v-btn
               @click="cartStore.addProduct(product.id)"
               :color="
-                cartStore.checkProduct(product.id) ? 'green' : 'surface-variant'
+                cartStore.isInCart(product.id) ? 'green' : 'surface-variant'
               "
               size="small"
               variant="tonal"
@@ -64,7 +68,6 @@ import { useCartStore } from "@/stores/cart";
 import { useWishlistStore } from "@/stores/wishlist";
 
 export default defineComponent({
-  name: "product-list",
   props: {
     products: {
       type: Object,
@@ -95,7 +98,7 @@ export default defineComponent({
 });
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 .v-card {
   cursor: pointer;
 

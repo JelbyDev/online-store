@@ -17,15 +17,15 @@ export const useCartStore = defineStore("cart", () => {
   }
 
   function removeProduct(productId: number): void {
-    if (checkProduct(productId)) delete products[productId];
+    if (isInCart(productId)) delete products[productId];
   }
 
-  function checkProduct(productId: number): boolean {
+  function isInCart(productId: number): boolean {
     if (products[productId]) return true;
     return false;
   }
 
-  function getQuantityProducts(): number {
+  function getTotalQuantityProducts(): number {
     const productsQuantity: Array<number> = Object.values(products);
     if (!productsQuantity) return 0;
     return productsQuantity.reduce((totalQuantities, count) => {
@@ -33,9 +33,19 @@ export const useCartStore = defineStore("cart", () => {
     }, 0);
   }
 
+  function getProducts(): { [index: number]: number }[] {
+    return { ...products };
+  }
+
   watch(products, () =>
     setItemInStorage("cartProducts", JSON.stringify(products))
   );
 
-  return { addProduct, removeProduct, checkProduct, getQuantityProducts };
+  return {
+    getProducts,
+    addProduct,
+    removeProduct,
+    isInCart,
+    getTotalQuantityProducts,
+  };
 });

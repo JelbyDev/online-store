@@ -37,6 +37,26 @@
               {{ filteringElement.title }}
             </v-expansion-panel-title>
             <v-expansion-panel-text>
+              <!--<div v-if="filteringElement.type === 'range'">
+                <v-range-slider
+                  v-model="selectedFilters[index]"
+                  :min="170"
+                  :max="490"
+                  step="10"
+                  thumb-label="always"
+                ></v-range-slider>
+              </div>
+              <div v-else-if="filteringElement.type === 'checkbox'">
+                <v-checkbox
+                  v-for="(filterValue, indexVal) in filteringElement.values"
+                  :key="indexVal"
+                  v-model="selectedFilters[index]"
+                  :label="filterValue"
+                  :value="filterValue"
+                  hide-details
+                  multiple
+                ></v-checkbox>
+              </div>-->
               <div
                 v-for="(filterValue, indexVal) in filteringElement.values"
                 :key="indexVal"
@@ -100,24 +120,29 @@ export default defineComponent({
 
     const filterPanelState = ref([0]);
     const filteringElements = {
+      /* price: {
+        title: "Цена",
+        type: "range",
+        values: ["170", "490"],
+      }, */
       category: {
         title: "Категория",
-        // type: "checkbox",
+        type: "checkbox",
         values: ["Джем", "Горный", "Клиар", "Ориджинал"],
       },
       size: {
         title: "Размер",
-        // type: "checkbox",
+        type: "checkbox",
         values: ["100", "200", "300", "400"],
       },
       color: {
         title: "Цвет",
-        // type: "checkbox",
+        type: "checkbox",
         values: ["Красный", "Зеленый", "Синий", "Желтый"],
       },
       popular: {
         title: "Популярные товары",
-        // type: "switch",
+        type: "checkbox",
         values: ["Да"],
       },
     };
@@ -133,10 +158,11 @@ export default defineComponent({
       Object.entries(filteringElements).reduce((returnObj, filter) => {
         const filterName = filter[0];
         const filterType = filter[1].type;
+        const filterValues = filter[1].values;
         if (filterType === "checkbox") returnObj[filterName] = [];
-        if (filterType === "switch") returnObj[filterName] = false;
+        if (filterType === "range") returnObj[filterName] = [...filterValues];
         return returnObj;
-      }, {} as { [index: string]: string[] | boolean })
+      }, {} as { [index: string]: string[] })
     ); */
 
     watch(
@@ -150,9 +176,9 @@ export default defineComponent({
         selectedSorting.value,
         searchQuery.value,
         selectedFilters
-      ).then((prod) => {
-        products.value = [...prod.products];
-        totalPages.value = prod.totalPages;
+      ).then((response) => {
+        products.value = [...response.products];
+        totalPages.value = response.totalPages;
       });
     }
 

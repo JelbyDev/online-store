@@ -16,7 +16,7 @@ export const useWishlistStore = defineStore("wishlist", () => {
     }
   }
 
-  function checkProduct(productId: number): boolean {
+  function isInWishlist(productId: number): boolean {
     if (products[productId]) return true;
     return false;
   }
@@ -29,5 +29,5 @@ export const useWishlistStore = defineStore("wishlist", () => {
     setItemInStorage("wishlistProducts", JSON.stringify(products))
   );
 
-  return { getProductsId, toggleProduct, checkProduct };
+  return { getProductsId, toggleProduct, isInWishlist };
 });

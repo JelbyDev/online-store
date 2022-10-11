@@ -1,0 +1,95 @@
+<template>
+  <div>
+    <app-loader :is-loading="isLoadingProduct"></app-loader>
+    <div v-if="product.id" class="mt-3">
+      <v-btn to="/">К списку товаров</v-btn>
+      <v-row class="mt-3">
+        <v-col cols="12" md="4">
+          <v-img :src="product.img" position="center center" cover></v-img>
+        </v-col>
+        <v-col cols="12" md="8">
+          <h1 class="text-h3 mb-3">{{ product.name }}</h1>
+          <v-list>
+            <v-list-item-title>
+              Категория: {{ product.category }}
+            </v-list-item-title>
+            <v-list-item-title> Размер: {{ product.size }} </v-list-item-title>
+            <v-list-item-title> Цвет: {{ product.color }} </v-list-item-title>
+            <v-list-item-title>
+              В наличии: {{ product.quantity }}
+            </v-list-item-title>
+          </v-list>
+
+          <app-formatted-price :price="product.price"></app-formatted-price>
+
+          <v-btn
+            @click="wishlistStore.toggleProduct(product.id)"
+            :color="
+              wishlistStore.isInWishlist(product.id)
+                ? 'green'
+                : 'surface-variant'
+            "
+            size="small"
+            variant="tonal"
+            icon="mdi-heart"
+          ></v-btn>
+
+          <v-btn
+            @click="cartStore.addProduct(product.id)"
+            :color="
+              cartStore.isInCart(product.id) ? 'green' : 'surface-variant'
+            "
+            size="small"
+            variant="tonal"
+            icon="mdi-cart-arrow-down"
+          ></v-btn>
+        </v-col>
+      </v-row>
+    </div>
+  </div>
+</template>
+
+<script lang="ts">
+import { Product } from "@/types";
+import { defineComponent, onMounted, ref } from "vue";
+import { useRoute, useRouter } from "vue-router";
+import { getProduct } from "@/api/Products";
+import { useCartStore } from "@/stores/cart";
+import { useWishlistStore } from "@/stores/wishlist";
+
+export default defineComponent({
+  setup() {
+    const route = useRoute();
+    const router = useRouter();
+    const cartStore = useCartStore();
+    const wishlistStore = useWishlistStore();
+
+    const product = ref({} as Product);
+    const isLoadingProduct = ref(true);
+
+    onMounted(() => {
+      const productId = +route.params.id;
+      getProduct(productId)
+        .then((response) => {
+          if (response === undefined) {
+            router.push("/not-found");
+          } else {
+            product.value = { ...response };
+          }
+        })
+        .finally(() => {
+          isLoadingProduct.value = false;
+        });
+    });
+
+    return {
+      cartStore,
+      wishlistStore,
+      product,
+      isLoadingProduct,
+    };
+  },
+});
+</script>
+
+<style lang="scss"></style>

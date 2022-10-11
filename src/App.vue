@@ -19,7 +19,7 @@
           </v-col>
           <v-col cols="auto">
             <v-btn variant="tonal" prepend-icon="mdi-cart-variant">{{
-              cartStore.getQuantityProducts()
+              cartStore.getTotalQuantityProducts()
             }}</v-btn>
           </v-col>
         </v-row>
@@ -30,18 +30,19 @@
       <v-list density="compact" nav>
         <v-list-item prepend-icon="mdi-view-dashboard" title="Каталог" to="/">
         </v-list-item>
-        <v-list-item prepend-icon="mdi-forum" title="О компании" to="about">
+        <v-list-item prepend-icon="mdi-forum" title="О компании" to="/about">
         </v-list-item>
         <v-list-item
           prepend-icon="mdi-heart"
           title="Избранные товары"
-          to="wishlist"
+          to="/wishlist"
         >
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
 
     <v-main>
+      <!--<cart-products></cart-products>-->
       <v-container><router-view /></v-container>
     </v-main>
 
@@ -53,10 +54,12 @@
 
 <script lang="ts">
 import { defineComponent, ref } from "vue";
-
 import { useCartStore } from "@/stores/cart";
 
+// import cartProducts from "@/components/CartProducts.vue";
+
 export default defineComponent({
+  // components: { cartProducts },
   setup() {
     const cartStore = useCartStore();
 

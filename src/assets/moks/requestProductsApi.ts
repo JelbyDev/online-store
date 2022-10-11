@@ -1,10 +1,29 @@
 import { Product } from "@/types";
 import products from "@/assets/moks/products";
-import { PRODUCTS_PER_PAGE } from "@/assets/moks/constants";
+import { PRODUCTS_PER_PAGE, API_RESPONSE_DELAY } from "@/assets/moks/constants";
+
+interface filterElements {
+  ids?: number[];
+  color?: string[];
+  popular?: string[];
+  category?: string[];
+  size?: string[];
+}
 
 export interface GetProductsResponse {
   totalPages: number;
   products: Product[];
+}
+
+export type GetProductResponse = Product | undefined;
+
+export function getProductRequest(
+  productId: number
+): Promise<GetProductResponse> {
+  return new Promise((resolve) => {
+    const product = products.find((product) => product.id === productId);
+    setTimeout(() => resolve(product), API_RESPONSE_DELAY);
+  });
 }
 
 export function getProductsRequest(
@@ -40,30 +59,36 @@ function searchProducts(searchQuery: string, products: Product[]): Product[] {
 }
 
 function filterProducts(
-  filters: { [index: string]: Array<string> },
+  filters: filterElements,
   products: Product[]
 ): Product[] {
   let returnProducts = [...products];
 
-  if (filters.popular.length === 1) {
+  if (filters.ids && filters.ids.length > 0) {
+    returnProducts = returnProducts.filter((product) =>
+      filters.ids?.includes(product.id)
+    );
+  }
+
+  if (filters.popular && filters.popular.length === 1) {
     returnProducts = returnProducts.filter((product) => product.isPopular);
   }
 
-  if (filters.color.length > 0) {
+  if (filters.color && filters.color.length > 0) {
     returnProducts = returnProducts.filter((product) =>
-      filters.color.includes(product.color)
+      filters.color?.includes(product.color)
     );
   }
 
-  if (filters.category.length > 0) {
+  if (filters.category && filters.category.length > 0) {
     returnProducts = returnProducts.filter((product) =>
-      filters.category.includes(product.category)
+      filters.category?.includes(product.category)
     );
   }
 
-  if (filters.size.length > 0) {
+  if (filters.size && filters.size.length > 0) {
     returnProducts = returnProducts.filter((product) =>
-      filters.size.includes(product.size)
+      filters.size?.includes(product.size)
     );
   }
 

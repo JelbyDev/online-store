@@ -1,6 +1,8 @@
 import {
   GetProductsResponse,
+  GetProductResponse,
   getProductsRequest,
+  getProductRequest,
 } from "@/assets/moks/requestProductsApi";
 
 export function getProducts(
@@ -10,4 +12,8 @@ export function getProducts(
   filters = {}
 ): Promise<GetProductsResponse> {
   return getProductsRequest(page, sort, search, filters);
+}
+
+export function getProduct(productId: number): Promise<GetProductResponse> {
+  return getProductRequest(productId);
 }
