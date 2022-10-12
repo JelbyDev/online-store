@@ -1,5 +1,18 @@
 <template>
   <v-app>
+    <v-dialog v-model="isVisibleCartModal" max-width="990">
+      <v-card>
+        <v-card-text>
+          <cart-products></cart-products>
+        </v-card-text>
+        <v-card-actions>
+          <v-btn color="primary" block @click="isVisibleCartModal = false">
+            Закрыть
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
     <v-app-bar>
       <v-container>
         <v-row no-gutters class="justify-space-between align-center">
@@ -18,9 +31,12 @@
             </v-row>
           </v-col>
           <v-col cols="auto">
-            <v-btn variant="tonal" prepend-icon="mdi-cart-variant">{{
-              cartStore.getTotalQuantityProducts()
-            }}</v-btn>
+            <v-btn
+              @click="isVisibleCartModal = true"
+              variant="tonal"
+              prepend-icon="mdi-cart-variant"
+              >{{ cartStore.getTotalQuantityProducts }}</v-btn
+            >
           </v-col>
         </v-row>
       </v-container>
@@ -42,7 +58,6 @@
     </v-navigation-drawer>
 
     <v-main>
-      <!--<cart-products></cart-products>-->
       <v-container><router-view /></v-container>
     </v-main>
 
@@ -56,18 +71,20 @@
 import { defineComponent, ref } from "vue";
 import { useCartStore } from "@/stores/cart";
 
-// import cartProducts from "@/components/CartProducts.vue";
+import cartProducts from "@/components/CartProducts.vue";
 
 export default defineComponent({
-  // components: { cartProducts },
+  components: { cartProducts },
   setup() {
     const cartStore = useCartStore();
 
     const isVisibleViewMenu = ref(false);
+    const isVisibleCartModal = ref(false);
 
     return {
       cartStore,
       isVisibleViewMenu,
+      isVisibleCartModal,
     };
   },
 });

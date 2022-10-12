@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { reactive, watch } from "vue";
+import { reactive, watch, computed } from "vue";
 import { setItemInStorage, getItemFromStorage } from "@/utils/Storage";
 
 export const useCartStore = defineStore("cart", () => {
@@ -16,6 +16,18 @@ export const useCartStore = defineStore("cart", () => {
     }
   }
 
+  function updateProduct(productId: number, quantity: number): void | boolean {
+    console.log(products, productId, quantity);
+
+    if (!products[productId]) return false;
+
+    if (quantity === 0) {
+      removeProduct(productId);
+    } else {
+      products[productId] = quantity;
+    }
+  }
+
   function removeProduct(productId: number): void {
     if (isInCart(productId)) delete products[productId];
   }
@@ -25,17 +37,17 @@ export const useCartStore = defineStore("cart", () => {
     return false;
   }
 
-  function getTotalQuantityProducts(): number {
+  function getProducts(): { [index: number]: number }[] {
+    return { ...products };
+  }
+
+  const getTotalQuantityProducts = computed(() => {
     const productsQuantity: Array<number> = Object.values(products);
     if (!productsQuantity) return 0;
     return productsQuantity.reduce((totalQuantities, count) => {
       return (totalQuantities += +count);
     }, 0);
-  }
-
-  function getProducts(): { [index: number]: number }[] {
-    return { ...products };
-  }
+  });
 
   watch(products, () =>
     setItemInStorage("cartProducts", JSON.stringify(products))
@@ -44,6 +56,7 @@ export const useCartStore = defineStore("cart", () => {
   return {
     getProducts,
     addProduct,
+    updateProduct,
     removeProduct,
     isInCart,
     getTotalQuantityProducts,

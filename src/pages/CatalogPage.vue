@@ -25,7 +25,11 @@
 
     <v-row>
       <v-col cols="3">
-        <v-expansion-panels v-model="filterPanelState" multiple>
+        <v-expansion-panels
+          v-model="filterPanelState"
+          variant="accordion"
+          multiple
+        >
           <v-expansion-panel
             v-for="(filteringElement, index) in filteringElements"
             :key="index"

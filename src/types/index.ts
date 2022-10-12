@@ -9,3 +9,6 @@ export interface Product {
   price: number;
   isPopular: boolean;
 }
+export interface CartProduct extends Product {
+  quantity: number;
+}
