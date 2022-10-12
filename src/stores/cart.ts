@@ -17,8 +17,6 @@ export const useCartStore = defineStore("cart", () => {
   }
 
   function updateProduct(productId: number, quantity: number): void | boolean {
-    console.log(products, productId, quantity);
-
     if (!products[productId]) return false;
 
     if (quantity === 0) {

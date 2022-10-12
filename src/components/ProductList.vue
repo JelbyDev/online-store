@@ -1,5 +1,10 @@
 <template>
-  <v-row v-if="products.length > 0">
+  <v-slide-x-transition
+    v-if="products.length > 0"
+    tag="div"
+    class="d-flex flex-wrap"
+    group
+  >
     <v-col
       v-for="product in products"
       :key="product.id"
@@ -58,7 +63,7 @@
         </v-card>
       </v-hover>
     </v-col>
-  </v-row>
+  </v-slide-x-transition>
   <div v-else>Товары не найдены...</div>
 </template>
 
