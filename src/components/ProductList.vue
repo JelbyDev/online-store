@@ -16,18 +16,18 @@
         <v-card
           :elevation="isHovering ? 5 : 2"
           :class="{ 'on-hover': isHovering }"
+          :to="`/product/${product.id}`"
           class="rounded-lg"
           v-bind="props"
-          :href="`#/product/${product.id}`"
         >
           <v-img :src="product.img" height="270" position="center center" cover>
-            <!--<v-overlay
+            <v-overlay
               :model-value="isHovering"
               contained
               class="align-center justify-center"
             >
-              <v-btn prepend-icon="mdi-magnify" flat>Подробнее</v-btn>
-            </v-overlay> -->
+              <v-btn flat>Перейти</v-btn>
+            </v-overlay>
           </v-img>
 
           <v-card-title>
@@ -38,27 +38,15 @@
           <v-card-actions>
             <v-spacer></v-spacer>
 
-            <v-btn
-              @click="wishlistStore.toggleProduct(product.id)"
-              :color="
-                wishlistStore.isInWishlist(product.id)
-                  ? 'green'
-                  : 'surface-variant'
-              "
-              size="small"
-              variant="tonal"
-              icon="mdi-heart"
-            ></v-btn>
+            <app-add-product-to-wishlist
+              @click.prevent
+              :productId="product.id"
+            ></app-add-product-to-wishlist>
 
-            <v-btn
-              @click="cartStore.addProduct(product.id)"
-              :color="
-                cartStore.isInCart(product.id) ? 'green' : 'surface-variant'
-              "
-              size="small"
-              variant="tonal"
-              icon="mdi-cart-arrow-down"
-            ></v-btn>
+            <app-add-product-to-cart
+              @click.prevent
+              :product="product"
+            ></app-add-product-to-cart>
           </v-card-actions>
         </v-card>
       </v-hover>
@@ -69,8 +57,6 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { useCartStore } from "@/stores/cart";
-import { useWishlistStore } from "@/stores/wishlist";
 
 export default defineComponent({
   props: {
@@ -90,15 +76,6 @@ export default defineComponent({
       type: Number,
       default: 0,
     },
-  },
-  setup() {
-    const cartStore = useCartStore();
-    const wishlistStore = useWishlistStore();
-
-    return {
-      cartStore,
-      wishlistStore,
-    };
   },
 });
 </script>

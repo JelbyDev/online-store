@@ -10,5 +10,6 @@ export interface Product {
   isPopular: boolean;
 }
 export interface CartProduct extends Product {
-  quantity: number;
+  cartQuantity: number;
+  cartTotalPrice: number;
 }

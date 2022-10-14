@@ -1,62 +1,73 @@
+import { Product, CartProduct } from "@/types";
 import { defineStore } from "pinia";
-import { reactive, watch, computed } from "vue";
-import { setItemInStorage, getItemFromStorage } from "@/utils/Storage";
+import { ref, computed, ComputedRef } from "vue";
 
 export const useCartStore = defineStore("cart", () => {
-  const storageProducts = getItemFromStorage("cartProducts");
-  const defaultProducts = storageProducts ? JSON.parse(storageProducts) : {};
+  const products = ref([] as CartProduct[]);
 
-  const products = reactive(defaultProducts);
-
-  function addProduct(productId: number): void {
-    if (products[productId]) {
-      products[productId] += 1;
+  function addProduct(
+    product: Product,
+    quantity = 1,
+    updateQuantity = false
+  ): void {
+    const foundProductInCart = getProduct(product.id);
+    if (!foundProductInCart) {
+      const newProduct = {
+        ...product,
+        cartQuantity: quantity,
+        cartTotalPrice: product.price * quantity,
+      };
+      products.value.push(newProduct);
     } else {
-      products[productId] = 1;
-    }
-  }
-
-  function updateProduct(productId: number, quantity: number): void | boolean {
-    if (!products[productId]) return false;
-
-    if (quantity === 0) {
-      removeProduct(productId);
-    } else {
-      products[productId] = quantity;
+      if (updateQuantity) {
+        foundProductInCart.cartQuantity = quantity;
+      } else {
+        foundProductInCart.cartQuantity += quantity;
+      }
+      foundProductInCart.cartTotalPrice =
+        foundProductInCart.price * foundProductInCart.cartQuantity;
     }
   }
 
   function removeProduct(productId: number): void {
-    if (isInCart(productId)) delete products[productId];
+    products.value = [
+      ...products.value.filter((product) => product.id !== productId),
+    ];
   }
 
+  function getProduct(productId: number): CartProduct | undefined {
+    return products.value.find((product) => product.id === productId);
+  }
+
+  function getProducts(): CartProduct[] {
+    return [...products.value];
+  }
+
+  const getTotals: ComputedRef<{ quantity: number; price: number }> = computed(
+    () => {
+      if (products.value.length === 0) return { quantity: 0, price: 0 };
+      return products.value.reduce(
+        (totals, product) => {
+          return {
+            quantity: totals.quantity + product.cartQuantity,
+            price: totals.price + product.cartTotalPrice,
+          };
+        },
+        { quantity: 0, price: 0 }
+      );
+    }
+  );
+
   function isInCart(productId: number): boolean {
-    if (products[productId]) return true;
+    if (getProduct(productId)) return true;
     return false;
   }
 
-  function getProducts(): { [index: number]: number }[] {
-    return { ...products };
-  }
-
-  const getTotalQuantityProducts = computed(() => {
-    const productsQuantity: Array<number> = Object.values(products);
-    if (!productsQuantity) return 0;
-    return productsQuantity.reduce((totalQuantities, count) => {
-      return (totalQuantities += +count);
-    }, 0);
-  });
-
-  watch(products, () =>
-    setItemInStorage("cartProducts", JSON.stringify(products))
-  );
-
   return {
-    getProducts,
     addProduct,
-    updateProduct,
     removeProduct,
+    getProducts,
+    getTotals,
     isInCart,
-    getTotalQuantityProducts,
   };
 });

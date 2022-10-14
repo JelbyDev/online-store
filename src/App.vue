@@ -31,12 +31,22 @@
             </v-row>
           </v-col>
           <v-col cols="auto">
-            <v-btn
-              @click="isVisibleCartModal = true"
-              variant="tonal"
-              prepend-icon="mdi-cart-variant"
-              >{{ cartStore.getTotalQuantityProducts }}</v-btn
-            >
+            <v-row dense>
+              <v-col>
+                <v-btn to="/wishlist" variant="tonal" prepend-icon="mdi-heart">
+                  0
+                </v-btn>
+              </v-col>
+              <v-col>
+                <v-btn
+                  @click="isVisibleCartModal = true"
+                  variant="tonal"
+                  prepend-icon="mdi-cart-variant"
+                >
+                  {{ cartStore.getTotals.quantity }}
+                </v-btn>
+              </v-col>
+            </v-row>
           </v-col>
         </v-row>
       </v-container>

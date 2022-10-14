@@ -22,27 +22,11 @@
 
           <app-formatted-price :price="product.price"></app-formatted-price>
 
-          <v-btn
-            @click="wishlistStore.toggleProduct(product.id)"
-            :color="
-              wishlistStore.isInWishlist(product.id)
-                ? 'green'
-                : 'surface-variant'
-            "
-            size="small"
-            variant="tonal"
-            icon="mdi-heart"
-          ></v-btn>
+          <app-add-product-to-wishlist
+            :productId="product.id"
+          ></app-add-product-to-wishlist>
 
-          <v-btn
-            @click="cartStore.addProduct(product.id)"
-            :color="
-              cartStore.isInCart(product.id) ? 'green' : 'surface-variant'
-            "
-            size="small"
-            variant="tonal"
-            icon="mdi-cart-arrow-down"
-          ></v-btn>
+          <app-add-product-to-cart :product="product"></app-add-product-to-cart>
         </v-col>
       </v-row>
     </div>
@@ -54,15 +38,11 @@ import { Product } from "@/types";
 import { defineComponent, onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { getProduct } from "@/api/Products";
-import { useCartStore } from "@/stores/cart";
-import { useWishlistStore } from "@/stores/wishlist";
 
 export default defineComponent({
   setup() {
     const route = useRoute();
     const router = useRouter();
-    const cartStore = useCartStore();
-    const wishlistStore = useWishlistStore();
 
     const product = ref({} as Product);
     const isLoadingProduct = ref(true);
@@ -83,8 +63,6 @@ export default defineComponent({
     });
 
     return {
-      cartStore,
-      wishlistStore,
       product,
       isLoadingProduct,
     };
