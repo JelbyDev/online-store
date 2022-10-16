@@ -8,6 +8,7 @@ interface filterElements {
   popular?: string[];
   category?: string[];
   size?: string[];
+  price?: number[];
 }
 
 export interface GetProductsResponse {
@@ -70,7 +71,7 @@ function filterProducts(
     );
   }
 
-  if (filters.popular && filters.popular.length === 1) {
+  if (filters.popular) {
     returnProducts = returnProducts.filter((product) => product.isPopular);
   }
 
@@ -89,6 +90,15 @@ function filterProducts(
   if (filters.size && filters.size.length > 0) {
     returnProducts = returnProducts.filter((product) =>
       filters.size?.includes(product.size)
+    );
+  }
+
+  if (filters.price && filters.price.length === 2) {
+    returnProducts = returnProducts.filter(
+      (product) =>
+        filters.price &&
+        product.price >= filters.price[0] &&
+        product.price <= filters.price[1]
     );
   }
 

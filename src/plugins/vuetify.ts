@@ -8,4 +8,17 @@ import * as components from "vuetify/components";
 // Vuetify
 import { createVuetify } from "vuetify";
 
-export default createVuetify({ components });
+export default createVuetify({
+  components,
+  theme: {
+    themes: {
+      light: {
+        dark: false,
+        colors: {
+          headerBg: "#FFF",
+          footerBg: "#545454",
+        },
+      },
+    },
+  },
+});

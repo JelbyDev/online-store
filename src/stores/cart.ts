@@ -1,9 +1,9 @@
 import { Product, CartProduct } from "@/types";
 import { defineStore } from "pinia";
-import { ref, computed, ComputedRef } from "vue";
+import { Ref, ref, ComputedRef, computed } from "vue";
 
 export const useCartStore = defineStore("cart", () => {
-  const products = ref([] as CartProduct[]);
+  const products: Ref<CartProduct[]> = ref([]);
 
   function addProduct(
     product: Product,
@@ -39,9 +39,9 @@ export const useCartStore = defineStore("cart", () => {
     return products.value.find((product) => product.id === productId);
   }
 
-  function getProducts(): CartProduct[] {
+  const getProducts: ComputedRef<CartProduct[]> = computed(() => {
     return [...products.value];
-  }
+  });
 
   const getTotals: ComputedRef<{ quantity: number; price: number }> = computed(
     () => {

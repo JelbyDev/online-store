@@ -1,8 +1,9 @@
 <template>
-  <v-slide-x-transition
+  <v-fade-transition
     v-if="products.length > 0"
     tag="div"
     class="d-flex flex-wrap"
+    leave-absolute
     group
   >
     <v-col
@@ -51,7 +52,7 @@
         </v-card>
       </v-hover>
     </v-col>
-  </v-slide-x-transition>
+  </v-fade-transition>
   <div v-else>Товары не найдены...</div>
 </template>
 
@@ -59,6 +60,7 @@
 import { defineComponent } from "vue";
 
 export default defineComponent({
+  name: "product-list",
   props: {
     products: {
       type: Object,

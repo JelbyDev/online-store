@@ -1,7 +1,9 @@
 <template>
   <v-btn
     @click="wishlistStore.toggleProduct(productId)"
-    :color="wishlistStore.isInWishlist(productId) ? 'green' : 'surface-variant'"
+    :color="
+      wishlistStore.isInWishlist(productId) ? 'success' : 'surface-variant'
+    "
     size="small"
     variant="tonal"
     icon="mdi-heart"

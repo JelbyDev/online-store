@@ -2,13 +2,12 @@
   <div>
     <app-loader :is-loading="isLoadingProduct"></app-loader>
     <div v-if="product.id" class="mt-3">
-      <v-btn to="/">К списку товаров</v-btn>
       <v-row class="mt-3">
         <v-col cols="12" md="4">
           <v-img :src="product.img" position="center center" cover></v-img>
         </v-col>
         <v-col cols="12" md="8">
-          <h1 class="text-h3 mb-3">{{ product.name }}</h1>
+          <app-page-title>{{ product.name }}</app-page-title>
           <v-list>
             <v-list-item-title>
               Категория: {{ product.category }}

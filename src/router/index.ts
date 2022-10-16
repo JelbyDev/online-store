@@ -1,7 +1,7 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
 import CatalogPage from "@/pages/CatalogPage.vue";
-import AboutPage from "@/pages/AboutPage.vue";
 import WishlistPage from "@/pages/WishlistPage.vue";
+import CartPage from "@/pages/CartPage.vue";
 import ProductPage from "@/pages/ProductPage.vue";
 import NotFoundPage from "@/pages/NotFoundPage.vue";
 
@@ -12,14 +12,14 @@ const routes: Array<RouteRecordRaw> = [
     component: CatalogPage,
   },
   {
-    path: "/about",
-    name: "about",
-    component: AboutPage,
-  },
-  {
     path: "/wishlist",
     name: "wishlist",
     component: WishlistPage,
+  },
+  {
+    path: "/cart",
+    name: "cart",
+    component: CartPage,
   },
   {
     path: "/product/:id",

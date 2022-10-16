@@ -1,7 +1,6 @@
 <template>
   <div>
-    <h1 class="text-h3 mb-3">Избранные товары</h1>
-
+    <app-page-title>Избранные товары</app-page-title>
     <product-list
       :products="products"
       :grid-cools="12"
@@ -13,8 +12,8 @@
 
 <script lang="ts">
 import { Product } from "@/types";
-import { defineComponent, ref, onMounted } from "vue";
-import { getWishlistProducts } from "@/api/Wishlist";
+import { defineComponent, Ref, ref, onMounted } from "vue";
+import { getProducts } from "@/api/Products";
 import { useWishlistStore } from "@/stores/wishlist";
 
 import ProductList from "@/components/ProductList.vue";
@@ -24,12 +23,14 @@ export default defineComponent({
   setup() {
     const wishlistStore = useWishlistStore();
 
-    const products = ref([] as Product[]);
+    const products: Ref<Product[]> = ref([]);
 
     onMounted(() => {
-      getWishlistProducts(wishlistStore.getProductsId()).then(
-        (prod) => (products.value = [...prod])
-      );
+      if (wishlistStore.getProductsId.length > 0) {
+        getProducts(undefined, undefined, undefined, {
+          ids: wishlistStore.getProductsId,
+        }).then((prod) => (products.value = [...prod.products]));
+      }
     });
 
     return {

@@ -1,9 +1,8 @@
 <template>
-  <v-table density="compact">
-    <template v-if="products.length">
-      <caption class="text-h4 mb-7 text-left">
-        Корзина товаров
-      </caption>
+  <div>
+    <app-page-title>Корзина товаров</app-page-title>
+
+    <v-table v-if="products.length" density="compact">
       <thead>
         <tr>
           <th class="text-center">Изображение</th>
@@ -30,7 +29,7 @@
           </td>
           <td class="text-center">
             <v-text-field
-              v-model.lazy.trim.number="product.cartQuantity"
+              v-model.lazy="product.cartQuantity"
               variant="outlined"
               @change="
                 cartStore.addProduct(product, product.cartQuantity, true)
@@ -56,13 +55,9 @@
           </td>
         </tr>
       </tfoot>
-    </template>
-    <template v-else>
-      <caption class="text-h4 text-center">
-        Корзина товаров пуста
-      </caption>
-    </template>
-  </v-table>
+    </v-table>
+    <div v-else>Нет добавленных товаров...</div>
+  </div>
 </template>
 
 <script lang="ts">
@@ -70,13 +65,14 @@ import { defineComponent, ref } from "vue";
 import { useCartStore } from "@/stores/cart";
 
 export default defineComponent({
+  name: "cart-products",
   setup() {
     const cartStore = useCartStore();
-    const products = ref(cartStore.getProducts());
+    const products = ref(cartStore.getProducts);
 
     return { cartStore, products };
   },
 });
 </script>
 
-<style scoped></style>
+<style lang="scss"></style>

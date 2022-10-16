@@ -1,7 +1,7 @@
 <template>
   <v-btn
     @click="cartStore.addProduct(product, quantity, updateQuantity)"
-    :color="cartStore.isInCart(product.id) ? 'green' : 'surface-variant'"
+    :color="cartStore.isInCart(product.id) ? 'success' : 'surface-variant'"
     size="small"
     variant="tonal"
     icon="mdi-cart-arrow-down"
@@ -19,9 +19,6 @@ export default defineComponent({
     product: {
       type: Object,
       required: true,
-      validator: (value) => {
-        return value as Product;
-      },
     },
     quantity: {
       type: Number,
@@ -30,6 +27,11 @@ export default defineComponent({
     updateQuantity: {
       type: Boolean,
       default: false,
+    },
+  },
+  product: {
+    validator: (value: Product) => {
+      return value as Product;
     },
   },
   setup() {

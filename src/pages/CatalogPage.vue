@@ -1,8 +1,7 @@
 <template>
   <div>
-    <h1 class="text-h3">Каталог</h1>
-
-    <v-row class="mt-3">
+    <app-page-title>Каталог</app-page-title>
+    <v-row>
       <v-col cols="6" md="4">
         <v-select
           v-model="selectedSorting"
@@ -25,57 +24,10 @@
 
     <v-row>
       <v-col cols="3">
-        <v-expansion-panels
-          v-model="filterPanelState"
-          variant="accordion"
-          multiple
-        >
-          <v-expansion-panel
-            v-for="(filteringElement, index) in filteringElements"
-            :key="index"
-          >
-            <v-expansion-panel-title
-              expand-icon="mdi-menu-down"
-              collapse-icon="mdi-menu-up"
-            >
-              {{ filteringElement.title }}
-            </v-expansion-panel-title>
-            <v-expansion-panel-text>
-              <!--<div v-if="filteringElement.type === 'range'">
-                <v-range-slider
-                  v-model="selectedFilters[index]"
-                  :min="170"
-                  :max="490"
-                  step="10"
-                  thumb-label="always"
-                ></v-range-slider>
-              </div>
-              <div v-else-if="filteringElement.type === 'checkbox'">
-                <v-checkbox
-                  v-for="(filterValue, indexVal) in filteringElement.values"
-                  :key="indexVal"
-                  v-model="selectedFilters[index]"
-                  :label="filterValue"
-                  :value="filterValue"
-                  hide-details
-                  multiple
-                ></v-checkbox>
-              </div>-->
-              <div
-                v-for="(filterValue, indexVal) in filteringElement.values"
-                :key="indexVal"
-              >
-                <v-checkbox
-                  v-model="selectedFilters[index]"
-                  :label="filterValue"
-                  :value="filterValue"
-                  hide-details
-                  multiple
-                ></v-checkbox>
-              </div>
-            </v-expansion-panel-text>
-          </v-expansion-panel>
-        </v-expansion-panels>
+        <product-filter
+          v-model="selectedFilters"
+          :filtering-elements="filteringElements"
+        ></product-filter>
       </v-col>
       <v-col cols="9">
         <product-list
@@ -100,78 +52,31 @@
 
 <script lang="ts">
 import { Product } from "@/types";
-import { defineComponent, reactive, ref, watch, onMounted } from "vue";
+import { defineComponent, Ref, ref, watch, onMounted } from "vue";
 import { getProducts } from "@/api/Products";
+import { FILTERING_ELEMENTS, SORTING_ELEMENTS } from "@/assets/moks/filters";
 
 import ProductList from "@/components/ProductList.vue";
+import ProductFilter from "../components/ProductFilter.vue";
 
 export default defineComponent({
-  components: { ProductList },
+  components: { ProductList, ProductFilter },
   setup() {
-    const products = ref([] as Product[]);
+    const products: Ref<Product[]> = ref([]);
+    const currentPage: Ref<number> = ref(1);
+    const totalPages: Ref<number> = ref(0);
 
-    const currentPage = ref(1);
-    const totalPages = ref(0);
+    const sortingElements = SORTING_ELEMENTS;
+    const selectedSorting: Ref<string> = ref(sortingElements[0].value);
+    const searchQuery: Ref<string> = ref("");
 
-    const sortingElements = [
-      { title: "Названию А-Я", value: "name--ASC" },
-      { title: "Названию Я-A", value: "name--DESC" },
-      { title: "Цене ▲", value: "price--ASC" },
-      { title: "Цене ▼", value: "price--DESC" },
-    ];
-    const selectedSorting = ref(sortingElements[0].value);
-    const searchQuery = ref("");
-
-    const filterPanelState = ref([0]);
-    const filteringElements = {
-      /* price: {
-        title: "Цена",
-        type: "range",
-        values: ["170", "490"],
-      }, */
-      category: {
-        title: "Категория",
-        type: "checkbox",
-        values: ["Джем", "Горный", "Клиар", "Ориджинал"],
-      },
-      size: {
-        title: "Размер",
-        type: "checkbox",
-        values: ["100", "200", "300", "400"],
-      },
-      color: {
-        title: "Цвет",
-        type: "checkbox",
-        values: ["Красный", "Зеленый", "Синий", "Желтый"],
-      },
-      popular: {
-        title: "Популярные товары",
-        type: "checkbox",
-        values: ["Да"],
-      },
-    };
-
-    const selectedFilters = reactive(
-      Object.keys(filteringElements).reduce((returnObj, filterName) => {
-        returnObj[filterName] = [];
-        return returnObj;
-      }, {} as { [index: string]: string[] })
-    );
-
-    /* const selectedFilters = reactive(
-      Object.entries(filteringElements).reduce((returnObj, filter) => {
-        const filterName = filter[0];
-        const filterType = filter[1].type;
-        const filterValues = filter[1].values;
-        if (filterType === "checkbox") returnObj[filterName] = [];
-        if (filterType === "range") returnObj[filterName] = [...filterValues];
-        return returnObj;
-      }, {} as { [index: string]: string[] })
-    ); */
+    const filteringElements = FILTERING_ELEMENTS;
+    const selectedFilters: Ref<{ [index: string]: number }> = ref({});
 
     watch(
       [currentPage, searchQuery, selectedSorting, selectedFilters],
-      loadProducts
+      loadProducts,
+      { deep: true }
     );
 
     function loadProducts(): void {
@@ -179,7 +84,7 @@ export default defineComponent({
         currentPage.value,
         selectedSorting.value,
         searchQuery.value,
-        selectedFilters
+        selectedFilters.value
       ).then((response) => {
         products.value = [...response.products];
         totalPages.value = response.totalPages;
@@ -197,9 +102,8 @@ export default defineComponent({
       sortingElements,
       selectedSorting,
 
-      filterPanelState,
-      filteringElements,
       selectedFilters,
+      filteringElements,
 
       currentPage,
       totalPages,

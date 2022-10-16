@@ -1,5 +1,5 @@
 <template>
-  <h1>Страница не найдена</h1>
+  <app-page-title>Страница не найдена</app-page-title>
 </template>
 
 <script lang="ts">

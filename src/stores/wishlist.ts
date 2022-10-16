@@ -1,33 +1,29 @@
 import { defineStore } from "pinia";
-import { reactive, watch } from "vue";
-import { setItemInStorage, getItemFromStorage } from "@/utils/Storage";
+import { Ref, ref, ComputedRef, computed } from "vue";
 
 export const useWishlistStore = defineStore("wishlist", () => {
-  const storageProducts = getItemFromStorage("wishlistProducts");
-  const defaultProducts = storageProducts ? JSON.parse(storageProducts) : {};
-
-  const products = reactive(defaultProducts);
+  const products: Ref<number[]> = ref([]);
 
   function toggleProduct(productId: number): void {
-    if (products[productId]) {
-      delete products[productId];
+    const foundProductInWishlist = products.value.indexOf(productId);
+    if (foundProductInWishlist !== -1) {
+      products.value.splice(foundProductInWishlist, 1);
     } else {
-      products[productId] = true;
+      products.value.push(productId);
     }
   }
 
   function isInWishlist(productId: number): boolean {
-    if (products[productId]) return true;
-    return false;
+    return products.value.includes(productId);
   }
 
-  function getProductsId(): number[] {
-    return Object.keys(products).map((product) => +product);
-  }
+  const getProductsId: ComputedRef<number[]> = computed(() => {
+    return [...products.value];
+  });
 
-  watch(products, () =>
-    setItemInStorage("wishlistProducts", JSON.stringify(products))
-  );
+  const getTotalCountProducts = computed(() => {
+    return products.value.length;
+  });
 
-  return { getProductsId, toggleProduct, isInWishlist };
+  return { getProductsId, getTotalCountProducts, toggleProduct, isInWishlist };
 });
