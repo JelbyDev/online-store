@@ -1,9 +1,4 @@
 export const FILTERING_ELEMENTS = {
-  price: {
-    title: "Цена",
-    type: "range",
-    values: ["170", "490"],
-  },
   category: {
     title: "Категория",
     type: "checkbox",
@@ -18,6 +13,11 @@ export const FILTERING_ELEMENTS = {
     title: "Цвет",
     type: "checkbox",
     values: ["Красный", "Зеленый", "Синий", "Желтый"],
+  },
+  price: {
+    title: "Цена",
+    type: "range",
+    values: ["170", "490"],
   },
   popular: {
     title: "Популярные товары",

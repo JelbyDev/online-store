@@ -2,31 +2,41 @@ import { Product, CartProduct } from "@/types";
 import { defineStore } from "pinia";
 import { Ref, ref, ComputedRef, computed } from "vue";
 
+import prod from "@/assets/moks/products";
+
 export const useCartStore = defineStore("cart", () => {
   const products: Ref<CartProduct[]> = ref([]);
+
+  addProduct(prod[0], 1);
+  addProduct(prod[1], 3);
 
   function addProduct(
     product: Product,
     quantity = 1,
     updateQuantity = false
   ): void {
+    quantity = quantity || 1;
+
     const foundProductInCart = getProduct(product.id);
     if (!foundProductInCart) {
-      const newProduct = {
-        ...product,
-        cartQuantity: quantity,
-        cartTotalPrice: product.price * quantity,
-      };
-      products.value.push(newProduct);
+      addNewProduct(product, quantity);
     } else {
-      if (updateQuantity) {
-        foundProductInCart.cartQuantity = quantity;
-      } else {
-        foundProductInCart.cartQuantity += quantity;
-      }
-      foundProductInCart.cartTotalPrice =
-        foundProductInCart.price * foundProductInCart.cartQuantity;
+      if (!updateQuantity) quantity += foundProductInCart.cartQuantity;
+      updateProduct(foundProductInCart, quantity);
     }
+  }
+
+  function addNewProduct(product: Product, quantity: number): void {
+    products.value.push({
+      ...product,
+      cartQuantity: quantity,
+      cartTotalPrice: product.price * quantity,
+    });
+  }
+
+  function updateProduct(product: CartProduct, quantity: number) {
+    product.cartQuantity = quantity;
+    product.cartTotalPrice = product.price * product.cartQuantity;
   }
 
   function removeProduct(productId: number): void {
@@ -40,7 +50,8 @@ export const useCartStore = defineStore("cart", () => {
   }
 
   const getProducts: ComputedRef<CartProduct[]> = computed(() => {
-    return [...products.value];
+    const productsToString = JSON.stringify(products.value);
+    return JSON.parse(productsToString);
   });
 
   const getTotals: ComputedRef<{ quantity: number; price: number }> = computed(

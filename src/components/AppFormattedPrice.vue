@@ -15,8 +15,12 @@ export default defineComponent({
     },
   },
   setup() {
-    function formattedPrice(price: number, currency: string): string {
-      return `${price.toFixed(0)} ${currency}`;
+    function formattedPrice(price: number): string {
+      return price.toLocaleString("ru-RU", {
+        style: "currency",
+        currency: "RUB",
+        maximumFractionDigits: 0,
+      });
     }
     return { formattedPrice, currency: CURRENCY };
   },
