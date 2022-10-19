@@ -25,7 +25,7 @@ export default defineComponent({
 
 <style lang="scss">
 .v-container {
-  max-width: 1280px;
+  max-width: 1024px;
   min-width: 320px;
 }
 </style>

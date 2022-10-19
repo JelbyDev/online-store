@@ -1,11 +1,22 @@
 <template>
   <v-btn
-    @click="cartStore.addProduct(product, quantity, updateQuantity)"
+    v-if="text"
+    @click="cartStore.addProduct(product as Product, quantity, updateQuantity)"
     :color="cartStore.isInCart(product.id) ? 'success' : 'surface-variant'"
-    size="small"
+    :size="size"
+    variant="tonal"
+    prepend-icon="mdi-cart-arrow-down"
+    >{{ text }}
+  </v-btn>
+  <v-btn
+    v-else
+    @click="cartStore.addProduct(product as Product, quantity, updateQuantity)"
+    :color="cartStore.isInCart(product.id) ? 'success' : 'surface-variant'"
+    :size="size"
     variant="tonal"
     icon="mdi-cart-arrow-down"
-  ></v-btn>
+  >
+  </v-btn>
 </template>
 
 <script lang="ts">
@@ -28,6 +39,14 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    size: {
+      type: String,
+      default: "small",
+    },
+    text: {
+      type: String,
+      default: "",
+    },
   },
   product: {
     validator: (value: Product) => {
@@ -36,6 +55,7 @@ export default defineComponent({
   },
   setup() {
     const cartStore = useCartStore();
+
     return { cartStore };
   },
 });

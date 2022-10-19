@@ -4,7 +4,7 @@
     :color="
       wishlistStore.isInWishlist(productId) ? 'success' : 'surface-variant'
     "
-    size="small"
+    :size="size"
     variant="tonal"
     icon="mdi-heart"
   ></v-btn>
@@ -20,6 +20,10 @@ export default defineComponent({
     productId: {
       type: Number,
       required: true,
+    },
+    size: {
+      type: String,
+      default: "small",
     },
   },
   setup() {
