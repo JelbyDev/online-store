@@ -1,4 +1,4 @@
-export const FILTERING_ELEMENTS = {
+export default {
   category: {
     title: "Категория",
     type: "checkbox",
@@ -24,10 +24,3 @@ export const FILTERING_ELEMENTS = {
     type: "switch",
   },
 };
-
-export const SORTING_ELEMENTS = [
-  { title: "Названию А-Я", value: "name--ASC" },
-  { title: "Названию Я-A", value: "name--DESC" },
-  { title: "Цене ▲", value: "price--ASC" },
-  { title: "Цене ▼", value: "price--DESC" },
-];

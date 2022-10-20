@@ -35,7 +35,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { defineComponent } from "vue";
 import { useCartStore } from "@/stores/cart";
 import { useWishlistStore } from "@/stores/wishlist";
 
@@ -44,12 +44,10 @@ export default defineComponent({
   setup() {
     const cartStore = useCartStore();
     const wishlistStore = useWishlistStore();
-    const isVisibleViewMenu = ref(false);
 
     return {
       cartStore,
       wishlistStore,
-      isVisibleViewMenu,
     };
   },
 });

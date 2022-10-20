@@ -2,7 +2,7 @@
   <div>
     <app-page-title>Каталог</app-page-title>
     <v-row>
-      <v-col cols="6" md="4">
+      <v-col cols="12" sm="5" md="4">
         <v-select
           v-model="selectedSorting"
           :items="sortingElements"
@@ -10,9 +10,10 @@
           item-value="value"
           label="Сортировка по:"
           variant="outlined"
+          hide-details
         ></v-select>
       </v-col>
-      <v-col cols="6" md="8">
+      <v-col cols="12" sm="7" md="8">
         <v-text-field
           v-model.trim="searchQuery"
           label="Поиск по названию товара"
@@ -23,18 +24,18 @@
     </v-row>
 
     <v-row>
-      <v-col cols="3">
+      <v-col cols="12" md="4" lg="3">
         <product-filter
           v-model="selectedFilters"
           :filtering-elements="filteringElements"
         ></product-filter>
       </v-col>
-      <v-col cols="9">
+      <v-col cols="12" md="8" lg="9">
         <product-list
           :products="products"
           :grid-cools="12"
           :grid-sm="6"
-          :grid-md="4"
+          :grid-lg="4"
         ></product-list>
 
         <div class="text-center mt-10">
@@ -54,7 +55,8 @@
 import { Product } from "@/types";
 import { defineComponent, Ref, ref, watch, onMounted } from "vue";
 import { getProducts } from "@/api/Products";
-import { FILTERING_ELEMENTS, SORTING_ELEMENTS } from "@/assets/moks/filters";
+import FILTERING_ELEMENTS from "@/assets/moks/filters";
+import SORTING_ELEMENTS from "@/assets/moks/sorts";
 
 import ProductList from "@/components/ProductList.vue";
 import ProductFilter from "../components/ProductFilter.vue";
@@ -73,9 +75,15 @@ export default defineComponent({
     const filteringElements = FILTERING_ELEMENTS;
     const selectedFilters: Ref<{ [index: string]: number }> = ref({});
 
+    watch(currentPage, loadProducts);
+
     watch(
-      [currentPage, searchQuery, selectedSorting, selectedFilters],
-      loadProducts,
+      [searchQuery, selectedSorting, selectedFilters],
+      () => {
+        const oldCurrentPage = currentPage.value;
+        currentPage.value = 1;
+        if (oldCurrentPage === 1) loadProducts();
+      },
       { deep: true }
     );
 

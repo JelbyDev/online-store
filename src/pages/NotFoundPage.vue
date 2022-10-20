@@ -1,5 +1,8 @@
 <template>
-  <app-page-title>Страница не найдена</app-page-title>
+  <div>
+    <app-page-title>Ошибка 404</app-page-title>
+    <div>Запрашиваемая страница не найдена!</div>
+  </div>
 </template>
 
 <script lang="ts">

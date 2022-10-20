@@ -8,6 +8,7 @@ export interface Product {
   quantity: number;
   price: number;
   isPopular: boolean;
+  description: string;
 }
 export interface CartProduct extends Product {
   cartQuantity: number;

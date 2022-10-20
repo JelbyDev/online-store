@@ -1,5 +1,5 @@
 <template>
-  <div style="max-width: 990px">
+  <div>
     <app-loader :is-loading="isLoadingProduct"></app-loader>
     <div v-if="product.id">
       <app-page-title>{{ product.name }}</app-page-title>
@@ -9,22 +9,28 @@
           </v-img>
         </v-col>
         <v-col cols="12" sm="6" md="8">
-          <v-row>
+          <v-row class="align-center">
             <v-col cols="12" md="6">
-              <v-list>
-                <v-list-item-title>
-                  <strong>Категория:</strong> {{ product.category }}
-                </v-list-item-title>
-                <v-list-item-title
-                  ><strong>Размер:</strong> {{ product.size }}
-                </v-list-item-title>
-                <v-list-item-title
-                  ><strong>Цвет:</strong> {{ product.color }}
-                </v-list-item-title>
-                <v-list-item-title
-                  ><strong>В наличии:</strong> {{ product.quantity }}
-                </v-list-item-title>
-              </v-list>
+              <v-table>
+                <tbody density="compact">
+                  <tr>
+                    <td><strong>Категория:</strong></td>
+                    <td>{{ product.category }}</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Размер:</strong></td>
+                    <td>{{ product.size }}</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Цвет:</strong></td>
+                    <td>{{ product.size }}</td>
+                  </tr>
+                  <tr>
+                    <td><strong>В наличии:</strong></td>
+                    <td>{{ product.quantity }}</td>
+                  </tr>
+                </tbody>
+              </v-table>
             </v-col>
             <v-col cols="12" md="6">
               <v-sheet border rounded class="pa-5">
@@ -44,11 +50,16 @@
                 <app-add-product-to-cart
                   :product="product"
                   :text="
-                    cartStore.isInCart(product.id) ? 'В корзине' : 'В корзину'
+                    cartStore.isInCart(product.id)
+                      ? 'Добавить еще'
+                      : 'В корзину'
                   "
                   size="large"
                 ></app-add-product-to-cart>
               </v-sheet>
+            </v-col>
+            <v-col cols="12">
+              {{ product.description }}
             </v-col>
           </v-row>
         </v-col>
