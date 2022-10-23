@@ -23,7 +23,7 @@
                   </tr>
                   <tr>
                     <td><strong>Цвет:</strong></td>
-                    <td>{{ product.size }}</td>
+                    <td>{{ product.color }}</td>
                   </tr>
                   <tr>
                     <td><strong>В наличии:</strong></td>
@@ -72,7 +72,7 @@
 import { Product } from "@/types";
 import { defineComponent, onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { getProduct } from "@/api/Products";
+import { getProduct } from "@/api/Product";
 import { useCartStore } from "@/stores/cart";
 
 export default defineComponent({

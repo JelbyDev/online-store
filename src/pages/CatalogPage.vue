@@ -54,7 +54,7 @@
 <script lang="ts">
 import { Product } from "@/types";
 import { defineComponent, Ref, ref, watch, onMounted } from "vue";
-import { getProducts } from "@/api/Products";
+import { getProducts } from "@/api/Product";
 import FILTERING_ELEMENTS from "@/assets/moks/filters";
 import SORTING_ELEMENTS from "@/assets/moks/sorts";
 

@@ -13,7 +13,7 @@
 <script lang="ts">
 import { Product } from "@/types";
 import { defineComponent, Ref, ref, onMounted } from "vue";
-import { getProducts } from "@/api/Products";
+import { getProducts } from "@/api/Product";
 import { useWishlistStore } from "@/stores/wishlist";
 
 import ProductList from "@/components/ProductList.vue";

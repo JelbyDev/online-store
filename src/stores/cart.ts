@@ -1,4 +1,4 @@
-import { Product, CartProduct } from "@/types";
+import { Product, CartProduct, OrderProduct } from "@/types";
 import { defineStore } from "pinia";
 import { Ref, ref, ComputedRef, computed } from "vue";
 
@@ -54,6 +54,16 @@ export const useCartStore = defineStore("cart", () => {
     return JSON.parse(productsToString);
   });
 
+  const getProductsForOrder: ComputedRef<OrderProduct[]> = computed(() => {
+    return products.value.reduce((orderProducts, product) => {
+      orderProducts.push({
+        id: product.id,
+        quantity: product.cartQuantity,
+      });
+      return orderProducts;
+    }, [] as OrderProduct[]);
+  });
+
   const getTotals: ComputedRef<{ quantity: number; price: number }> = computed(
     () => {
       if (products.value.length === 0) return { quantity: 0, price: 0 };
@@ -78,6 +88,7 @@ export const useCartStore = defineStore("cart", () => {
     addProduct,
     removeProduct,
     getProducts,
+    getProductsForOrder,
     getTotals,
     isInCart,
   };

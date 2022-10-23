@@ -66,21 +66,37 @@
           ></app-formatted-price>
         </div>
       </div>
+      <div class="text-right mt-5">
+        <v-btn @click="showOrderForm" color="info" size="large">
+          Сделать заказ</v-btn
+        >
+      </div>
     </div>
     <div v-else>Нет добавленных товаров...</div>
   </div>
+
+  <v-dialog v-model="isOrderFormVisible" max-width="520" min-width="320">
+    <order-form :products="cartStore.getProductsForOrder"></order-form>
+  </v-dialog>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, Ref, ref } from "vue";
 import { useCartStore } from "@/stores/cart";
+import OrderForm from "@/components/OrderForm.vue";
 
 export default defineComponent({
   name: "cart-products",
+  components: { OrderForm },
   setup() {
     const cartStore = useCartStore();
+    const isOrderFormVisible: Ref<boolean> = ref(false);
 
-    return { cartStore };
+    function showOrderForm() {
+      isOrderFormVisible.value = true;
+    }
+
+    return { cartStore, isOrderFormVisible, showOrderForm };
   },
 });
 </script>

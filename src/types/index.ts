@@ -14,3 +14,18 @@ export interface CartProduct extends Product {
   cartQuantity: number;
   cartTotalPrice: number;
 }
+
+export interface Customer {
+  firstName: string;
+  email: string;
+}
+
+export interface OrderProduct {
+  id: number;
+  quantity: number;
+}
+
+export interface Order {
+  products: OrderProduct[];
+  customer: Customer;
+}
