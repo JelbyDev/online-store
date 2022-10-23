@@ -68,11 +68,11 @@ export default defineComponent({
     const isFormValid: Ref<boolean> = ref(false);
     const isFormSending: Ref<boolean> = ref(false);
     const responseSending: Ref<boolean | null> = ref(null);
+
     const customer: Customer = reactive({
       firstName: "",
       email: "",
     });
-
     const customerRules = {
       name: [
         (v: string): boolean | string => !!v || "Заполните имя",

@@ -25,15 +25,15 @@
       <v-card-actions>
         <v-spacer></v-spacer>
 
-        <app-add-product-to-wishlist
+        <product-add-to-wishlist-button
           @click.prevent
           :productId="product.id"
-        ></app-add-product-to-wishlist>
+        ></product-add-to-wishlist-button>
 
-        <app-add-product-to-cart
+        <product-add-to-cart-button
           @click.prevent
           :product="product"
-        ></app-add-product-to-cart>
+        ></product-add-to-cart-button>
       </v-card-actions>
     </v-card>
   </v-hover>
@@ -42,8 +42,12 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 
+import ProductAddToCartButton from "@/components/ProductAddToCartButton.vue";
+import ProductAddToWishlistButton from "@/components/ProductAddToWishlistButton.vue";
+
 export default defineComponent({
   name: "product-list-item",
+  components: { ProductAddToCartButton, ProductAddToWishlistButton },
   props: {
     product: {
       type: Object,

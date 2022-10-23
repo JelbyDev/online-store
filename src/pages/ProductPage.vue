@@ -42,12 +42,12 @@
                     ></app-formatted-price>
                   </v-col>
                   <v-col cols="auto">
-                    <app-add-product-to-wishlist
+                    <product-add-to-wishlist-button
                       :productId="product.id"
-                    ></app-add-product-to-wishlist>
+                    ></product-add-to-wishlist-button>
                   </v-col>
                 </v-row>
-                <app-add-product-to-cart
+                <product-add-to-cart-button
                   :product="product"
                   :text="
                     cartStore.isInCart(product.id)
@@ -55,7 +55,7 @@
                       : 'В корзину'
                   "
                   size="large"
-                ></app-add-product-to-cart>
+                ></product-add-to-cart-button>
               </v-sheet>
             </v-col>
             <v-col cols="12">
@@ -75,7 +75,11 @@ import { useRoute, useRouter } from "vue-router";
 import { getProduct } from "@/api/Product";
 import { useCartStore } from "@/stores/cart";
 
+import ProductAddToCartButton from "@/components/ProductAddToCartButton.vue";
+import ProductAddToWishlistButton from "@/components/ProductAddToWishlistButton.vue";
+
 export default defineComponent({
+  components: { ProductAddToCartButton, ProductAddToWishlistButton },
   setup() {
     const cartStore = useCartStore();
     const route = useRoute();
