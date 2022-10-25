@@ -1,18 +1,20 @@
 <template>
   <v-btn
     v-if="text"
-    @click="cartStore.addProduct(product as Product, quantity, updateQuantity)"
+    @click="cartStore.addProduct(product, quantity, updateQuantity)"
     :color="cartStore.isInCart(product.id) ? 'success' : 'surface-variant'"
     :size="size"
+    :loading="cartStore.getIsCartLoading"
     variant="tonal"
     prepend-icon="mdi-cart-arrow-down"
     >{{ text }}
   </v-btn>
   <v-btn
     v-else
-    @click="cartStore.addProduct(product as Product, quantity, updateQuantity)"
+    @click="cartStore.addProduct(product, quantity, updateQuantity)"
     :color="cartStore.isInCart(product.id) ? 'success' : 'surface-variant'"
     :size="size"
+    :loading="cartStore.getIsCartLoading"
     variant="tonal"
     icon="mdi-cart-arrow-down"
   >
@@ -21,14 +23,13 @@
 
 <script lang="ts">
 import { Product } from "@/types";
-import { defineComponent } from "vue";
+import { defineComponent, PropType } from "vue";
 import { useCartStore } from "@/stores/cart";
 
 export default defineComponent({
-  name: "app-add-product-to-cart",
   props: {
     product: {
-      type: Object,
+      type: Object as PropType<Product>,
       required: true,
     },
     quantity: {
@@ -48,11 +49,6 @@ export default defineComponent({
       default: "",
     },
   },
-  product: {
-    validator: (value: Product) => {
-      return value as Product;
-    },
-  },
   setup() {
     const cartStore = useCartStore();
 
@@ -60,5 +56,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style scoped></style>

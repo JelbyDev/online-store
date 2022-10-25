@@ -15,7 +15,6 @@ import { defineComponent } from "vue";
 import { useWishlistStore } from "@/stores/wishlist";
 
 export default defineComponent({
-  name: "app-add-product-to-wishlist",
   props: {
     productId: {
       type: Number,
@@ -32,5 +31,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style scoped></style>

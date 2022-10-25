@@ -1,4 +1,6 @@
-export default {
+import { FilteringElements } from "@/types";
+
+const FILTERING_ELEMENTS: FilteringElements = {
   category: {
     title: "Категория",
     type: "checkbox",
@@ -24,3 +26,5 @@ export default {
     type: "switch",
   },
 };
+
+export default FILTERING_ELEMENTS;

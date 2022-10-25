@@ -40,17 +40,16 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-
+import { Product } from "@/types";
+import { defineComponent, PropType } from "vue";
 import ProductAddToCartButton from "@/components/ProductAddToCartButton.vue";
 import ProductAddToWishlistButton from "@/components/ProductAddToWishlistButton.vue";
 
 export default defineComponent({
-  name: "product-list-item",
   components: { ProductAddToCartButton, ProductAddToWishlistButton },
   props: {
     product: {
-      type: Object,
+      type: Object as PropType<Product>,
       required: true,
     },
   },

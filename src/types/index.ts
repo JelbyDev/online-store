@@ -10,6 +10,7 @@ export interface Product {
   isPopular: boolean;
   description: string;
 }
+
 export interface CartProduct extends Product {
   cartQuantity: number;
   cartTotalPrice: number;
@@ -28,4 +29,34 @@ export interface OrderProduct {
 export interface Order {
   products: OrderProduct[];
   customer: Customer;
+}
+
+export interface SortingElement {
+  title: string;
+  value: string;
+}
+
+interface FilteringElementCheckbox {
+  title: string;
+  type: "checkbox";
+  values: string[];
+}
+interface FilteringElementSwitch {
+  title: string;
+  type: "switch";
+}
+interface FilteringElementRange {
+  title: string;
+  type: "range";
+  values: string[];
+}
+export type FilteringElements = {
+  [index: string]:
+    | FilteringElementCheckbox
+    | FilteringElementSwitch
+    | FilteringElementRange;
+};
+
+export interface SelectedFilters {
+  [index: string]: number[] | string[] | boolean;
 }

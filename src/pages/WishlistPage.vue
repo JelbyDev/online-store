@@ -1,43 +1,37 @@
 <template>
   <div>
     <app-page-title>Избранные товары</app-page-title>
-    <product-list
+
+    <products-list
       :products="products"
+      :isLoadingProducts="isLoadingProducts"
       :grid-cools="12"
       :grid-sm="6"
       :grid-md="3"
-    ></product-list>
+    ></products-list>
   </div>
 </template>
 
 <script lang="ts">
-import { Product } from "@/types";
-import { defineComponent, Ref, ref, onMounted } from "vue";
-import { getProducts } from "@/api/Product";
+import { defineComponent } from "vue";
 import { useWishlistStore } from "@/stores/wishlist";
-
-import ProductList from "@/components/ProductList.vue";
+import { useProductsList } from "@/hooks/useProductsList";
+import ProductsList from "@/components/ProductsList.vue";
 
 export default defineComponent({
-  components: { ProductList },
+  components: { ProductsList },
   setup() {
     const wishlistStore = useWishlistStore();
-
-    const products: Ref<Product[]> = ref([]);
-
-    onMounted(() => {
-      if (wishlistStore.getProductsId.length > 0) {
-        getProducts(undefined, undefined, undefined, {
-          ids: wishlistStore.getProductsId,
-        }).then((prod) => (products.value = [...prod.products]));
-      }
+    const { products, isLoadingProducts } = useProductsList({
+      ids: wishlistStore.getProductsId,
     });
 
     return {
       products,
+      isLoadingProducts,
     };
   },
 });
 </script>
 
-<style lang="scss"></style>
+<style lang="scss" scoped></style>

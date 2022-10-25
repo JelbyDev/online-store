@@ -10,6 +10,7 @@
       >
         {{ filteringElement.title }}
       </v-expansion-panel-title>
+
       <v-expansion-panel-text>
         <div v-if="filteringElement.type === 'range'" class="pt-7">
           <v-range-slider
@@ -21,6 +22,7 @@
             color="info"
           ></v-range-slider>
         </div>
+
         <div v-else-if="filteringElement.type === 'checkbox'">
           <v-checkbox
             v-for="(filterValue, indexVal) in filteringElement.values"
@@ -33,6 +35,7 @@
             multiple
           ></v-checkbox>
         </div>
+
         <div v-else-if="filteringElement.type === 'switch'">
           <v-switch
             v-model="selectedFilters[index]"
@@ -47,37 +50,27 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref, watch } from "vue";
+import { FilteringElements, SelectedFilters } from "@/types";
+import { defineComponent, PropType, Ref, ref, watch } from "vue";
+import { useProductsFilter } from "@/hooks/useProductsFilter";
 
 export default defineComponent({
-  name: "product-filter",
   props: {
     modelValue: {
-      type: Object,
+      type: Object as PropType<SelectedFilters>,
       required: true,
     },
     filteringElements: {
-      type: Object,
+      type: Object as PropType<FilteringElements>,
       required: true,
     },
   },
   emits: {
-    "update:modelValue": (value: { [index: number]: number[] | string[] }) =>
-      value as { [index: number]: number[] | string[] },
+    "update:modelValue": (value: SelectedFilters) => value as SelectedFilters,
   },
   setup(props, { emit }) {
-    const filterPanelState = ref([0]);
-
-    const selectedFilters = reactive(
-      Object.entries(props.filteringElements).reduce((returnObj, filter) => {
-        const filterName = filter[0];
-        const filterType = filter[1].type;
-        const filterValues = filter[1].values;
-        if (filterType === "checkbox") returnObj[filterName] = [];
-        if (filterType === "range") returnObj[filterName] = [...filterValues];
-        return returnObj;
-      }, {} as { [index: string]: string[] })
-    );
+    const filterPanelState: Ref<number[]> = ref([0]);
+    const { selectedFilters } = useProductsFilter(props.filteringElements);
 
     watch(selectedFilters, () => {
       emit("update:modelValue", selectedFilters);
@@ -90,5 +83,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style lang="scss"></style>

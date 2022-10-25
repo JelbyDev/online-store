@@ -6,11 +6,12 @@
           target="_blank"
           prepend-icon="mdi-github"
           variant="text"
-          href="https://github.com/JelbyDev"
+          href="https://github.com/JelbyDev/online-store"
         >
           JelbyDev
         </v-btn>
       </div>
+
       <v-row dense class="justify-center">
         <v-col
           v-for="(technology, index) in technologyList"
@@ -20,6 +21,7 @@
           {{ technology }}
         </v-col>
       </v-row>
+
       <div class="text-center mt-3">© 2022</div>
     </v-container>
   </v-footer>
@@ -29,7 +31,6 @@
 import { defineComponent } from "vue";
 
 export default defineComponent({
-  name: "the-footer",
   setup() {
     const technologyList = [
       "Vue 3",
@@ -43,5 +44,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style lang="scss"></style>

@@ -1,8 +1,11 @@
 import { defineStore } from "pinia";
-import { Ref, ref, ComputedRef, computed } from "vue";
+import { Ref, ref, ComputedRef, computed, watch } from "vue";
+import { setItemInStorage, getItemFromStorage } from "@/utils/storage";
 
 export const useWishlistStore = defineStore("wishlist", () => {
-  const products: Ref<number[]> = ref([]);
+  const storageProducts = getItemFromStorage("wishlistProducts");
+  const defaultProducts = storageProducts ? JSON.parse(storageProducts) : [];
+  const products: Ref<number[]> = ref(defaultProducts);
 
   function toggleProduct(productId: number): void {
     const foundProductInWishlist = products.value.indexOf(productId);
@@ -24,6 +27,12 @@ export const useWishlistStore = defineStore("wishlist", () => {
   const getTotalCountProducts = computed(() => {
     return products.value.length;
   });
+
+  watch(
+    products,
+    () => setItemInStorage("wishlistProducts", JSON.stringify(products.value)),
+    { deep: true }
+  );
 
   return { getProductsId, getTotalCountProducts, toggleProduct, isInWishlist };
 });

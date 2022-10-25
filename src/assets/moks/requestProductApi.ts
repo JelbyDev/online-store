@@ -31,27 +31,42 @@ export function getProductsRequest(
   page: number,
   sort: string,
   search = "",
-  filters = {}
+  filters: filterElements = {}
 ): Promise<GetProductsResponse> {
   return new Promise((resolve) => {
     const searchedProducts = searchProducts(search, products);
     const filteredProducts = filterProducts(filters, searchedProducts);
 
     const totalPages = Math.ceil(filteredProducts.length / PRODUCTS_PER_PAGE);
-    const startProdIndex = (page - 1) * PRODUCTS_PER_PAGE;
-    const endProdIndex = startProdIndex + PRODUCTS_PER_PAGE;
 
-    const limitedProducts = filteredProducts.slice(
-      startProdIndex,
-      endProdIndex
+    const limitedProducts = limitProducts(
+      filteredProducts,
+      page,
+      !!filters.ids
     );
+
     const sortedProducts = sortProducts(sort, limitedProducts);
 
-    resolve({
-      totalPages: totalPages,
-      products: sortedProducts,
-    });
+    setTimeout(
+      () =>
+        resolve({
+          totalPages: totalPages,
+          products: sortedProducts,
+        }),
+      API_RESPONSE_DELAY
+    );
   });
+}
+
+function limitProducts(
+  products: Product[],
+  page: number,
+  isNotLimit = false
+): Product[] {
+  if (isNotLimit) return [...products];
+  const startProdIndex = (page - 1) * PRODUCTS_PER_PAGE;
+  const endProdIndex = startProdIndex + PRODUCTS_PER_PAGE;
+  return [...products.slice(startProdIndex, endProdIndex)];
 }
 
 function searchProducts(searchQuery: string, products: Product[]): Product[] {
@@ -65,7 +80,7 @@ function filterProducts(
 ): Product[] {
   let returnProducts = [...products];
 
-  if (filters.ids && filters.ids.length > 0) {
+  if (filters.ids) {
     returnProducts = returnProducts.filter((product) =>
       filters.ids?.includes(product.id)
     );

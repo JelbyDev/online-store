@@ -5,6 +5,7 @@
         <v-col cols="auto">
           <v-app-bar-title>JELBY Market</v-app-bar-title>
         </v-col>
+
         <v-col cols="auto">
           <v-row dense>
             <v-col>
@@ -17,10 +18,12 @@
                 {{ wishlistStore.getTotalCountProducts }}
               </v-btn>
             </v-col>
+
             <v-col>
               <v-btn
                 to="/cart"
                 :color="cartStore.getTotals.quantity ? 'info' : ''"
+                :loading="cartStore.getIsCartLoading"
                 variant="tonal"
                 prepend-icon="mdi-cart-variant"
               >
@@ -40,7 +43,6 @@ import { useCartStore } from "@/stores/cart";
 import { useWishlistStore } from "@/stores/wishlist";
 
 export default defineComponent({
-  name: "the-header",
   setup() {
     const cartStore = useCartStore();
     const wishlistStore = useWishlistStore();
@@ -52,5 +54,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style lang="scss"></style>

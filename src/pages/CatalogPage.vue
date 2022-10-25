@@ -15,7 +15,7 @@
       </v-col>
       <v-col cols="12" sm="7" md="8">
         <v-text-field
-          v-model.trim="searchQuery"
+          v-model.lazy.trim="searchQuery"
           label="Поиск по названию товара"
           variant="outlined"
           clearable
@@ -25,20 +25,22 @@
 
     <v-row>
       <v-col cols="12" md="4" lg="3">
-        <product-filter
+        <products-filter
           v-model="selectedFilters"
           :filtering-elements="filteringElements"
-        ></product-filter>
+        ></products-filter>
       </v-col>
+
       <v-col cols="12" md="8" lg="9">
-        <product-list
+        <products-list
           :products="products"
+          :isLoadingProducts="isLoadingProducts"
           :grid-cools="12"
           :grid-sm="6"
           :grid-lg="4"
-        ></product-list>
+        ></products-list>
 
-        <div class="text-center mt-10">
+        <div v-if="products.length" class="text-center mt-10">
           <v-pagination
             v-model="currentPage"
             :length="totalPages"
@@ -52,67 +54,34 @@
 </template>
 
 <script lang="ts">
-import { Product } from "@/types";
-import { defineComponent, Ref, ref, watch, onMounted } from "vue";
-import { getProducts } from "@/api/Product";
-import FILTERING_ELEMENTS from "@/assets/moks/filters";
-import SORTING_ELEMENTS from "@/assets/moks/sorts";
-
-import ProductList from "@/components/ProductList.vue";
-import ProductFilter from "../components/ProductFilter.vue";
+import { defineComponent } from "vue";
+import { useProductsList } from "@/hooks/useProductsList";
+import ProductsList from "@/components/ProductsList.vue";
+import ProductsFilter from "../components/ProductsFilter.vue";
 
 export default defineComponent({
-  components: { ProductList, ProductFilter },
+  components: { ProductsList, ProductsFilter },
   setup() {
-    const products: Ref<Product[]> = ref([]);
-    const currentPage: Ref<number> = ref(1);
-    const totalPages: Ref<number> = ref(0);
-
-    const sortingElements = SORTING_ELEMENTS;
-    const selectedSorting: Ref<string> = ref(sortingElements[0].value);
-    const searchQuery: Ref<string> = ref("");
-
-    const filteringElements = FILTERING_ELEMENTS;
-    const selectedFilters: Ref<{ [index: string]: number }> = ref({});
-
-    watch(currentPage, loadProducts);
-
-    watch(
-      [searchQuery, selectedSorting, selectedFilters],
-      () => {
-        const oldCurrentPage = currentPage.value;
-        currentPage.value = 1;
-        if (oldCurrentPage === 1) loadProducts();
-      },
-      { deep: true }
-    );
-
-    function loadProducts(): void {
-      getProducts(
-        currentPage.value,
-        selectedSorting.value,
-        searchQuery.value,
-        selectedFilters.value
-      ).then((response) => {
-        products.value = [...response.products];
-        totalPages.value = response.totalPages;
-      });
-    }
-
-    onMounted(() => {
-      loadProducts();
-    });
+    const {
+      products,
+      isLoadingProducts,
+      currentPage,
+      totalPages,
+      sortingElements,
+      filteringElements,
+      searchQuery,
+      selectedSorting,
+      selectedFilters,
+    } = useProductsList();
 
     return {
       products,
-
+      isLoadingProducts,
       searchQuery,
       sortingElements,
       selectedSorting,
-
       selectedFilters,
       filteringElements,
-
       currentPage,
       totalPages,
     };

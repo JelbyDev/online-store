@@ -4,7 +4,6 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { CURRENCY } from "@/config/variables";
 
 export default defineComponent({
   name: "app-formatted-price",
@@ -22,9 +21,7 @@ export default defineComponent({
         maximumFractionDigits: 0,
       });
     }
-    return { formattedPrice, currency: CURRENCY };
+    return { formattedPrice };
   },
 });
 </script>
-
-<style scoped></style>
