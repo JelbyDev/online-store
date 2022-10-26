@@ -33,6 +33,7 @@
             color="info"
             hide-details
             multiple
+            density="compact"
           ></v-checkbox>
         </div>
 
