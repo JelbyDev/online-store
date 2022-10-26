@@ -7,7 +7,7 @@
         <v-text-field
           v-model="customer.firstName"
           :rules="customerRules.name"
-          :counter="10"
+          counter="10"
           class="mb-2"
           label="Ваше имя*"
           variant="outlined"

@@ -12,15 +12,15 @@
         </v-btn>
       </div>
 
-      <v-row dense class="justify-center">
-        <v-col
+      <div class="d-flex justify-center flex-wrap">
+        <div
+          class="pa-1"
           v-for="(technology, index) in technologyList"
           :key="index"
-          cols="auto"
         >
           {{ technology }}
-        </v-col>
-      </v-row>
+        </div>
+      </div>
 
       <div class="text-center mt-3">© 2022</div>
     </v-container>
@@ -36,8 +36,8 @@ export default defineComponent({
       "Vue 3",
       "Vuetify",
       "VueRouter",
-      "TypeScript",
       "Pinia",
+      "TypeScript",
     ];
 
     return { technologyList };

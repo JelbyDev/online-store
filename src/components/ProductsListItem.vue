@@ -4,14 +4,14 @@
       :elevation="isHovering ? 5 : 2"
       :class="{ 'on-hover': isHovering }"
       :to="`/product/${product.id}`"
-      class="rounded-lg"
       v-bind="props"
+      class="rounded-lg"
     >
       <v-img :src="product.img" height="270" position="center center" cover>
         <v-overlay
           :model-value="isHovering"
-          contained
           class="align-center justify-center"
+          contained
         >
           <v-btn flat>Перейти</v-btn>
         </v-overlay>

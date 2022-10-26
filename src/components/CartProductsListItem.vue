@@ -1,26 +1,35 @@
 <template>
-  <div class="cart__row d-flex align-center">
-    <div class="ma-1 pa-1">
+  <v-row
+    class="cart-row d-flex align-center justify-center flex-wrap py-2 px-3"
+    no-gutters
+  >
+    <v-col class="pa-1" cols="12" sm="auto">
       <v-btn
         @click="cartStore.removeProduct(product.id)"
         icon="mdi-close"
         size="x-small"
         color="error"
       ></v-btn>
-    </div>
+    </v-col>
 
-    <div class="cart__image ma-1 pa-1">
-      <v-img :src="product.img" height="100px" position="center center"></v-img>
-    </div>
+    <v-col class="pa-1" cols="12" sm="3" md="2">
+      <v-img :src="product.img" height="130" position="center center"></v-img>
+    </v-col>
 
-    <div class="flex-sm-grow-1 ma-1 pa-1">
+    <v-col
+      class="flex-sm-grow-1 text-center text-sm-left pa-1"
+      cols="12"
+      sm="8"
+      md="auto"
+    >
       {{ product.name }}
-    </div>
+      <div class="text-caption">В наличии: {{ product.quantity }} шт.</div>
+    </v-col>
 
-    <div class="cart__quantity d-flex flex-wrap justify-center ma-1 pa-1">
-      <div class="d-flex align-center">
+    <v-col cols="12" sm="auto" class="text-center pa-1 mt-1 mt-sm-0">
+      <div class="cart-row__quantity d-inline-flex align-center">
         <v-btn
-          @click="cartStore.addProduct(product, product.cartQuantity - 1, true)"
+          @click="updateQuantityProduct(product, product.cartQuantity - 1)"
           icon="mdi-minus"
           size="x-small"
           color="info"
@@ -28,8 +37,9 @@
         ></v-btn>
 
         <v-text-field
-          @change="cartStore.addProduct(product, product.cartQuantity, true)"
+          @change="updateQuantityProduct(product, $event)"
           :model-value="product.cartQuantity"
+          bg-color="#fff"
           variant="outlined"
           density="compact"
           hide-details
@@ -37,25 +47,27 @@
         </v-text-field>
 
         <v-btn
-          @click="cartStore.addProduct(product, product.cartQuantity + 1, true)"
+          @click="updateQuantityProduct(product, product.cartQuantity + 1)"
           icon="mdi-plus"
           size="x-small"
           color="info"
           class="ml-2"
         ></v-btn>
       </div>
+    </v-col>
 
-      <div class="w-100 text-center text-subtitle-2">
-        Доступно {{ product.quantity }} шт.
-      </div>
-    </div>
-
-    <div class="cart__price ma-1 pa-1 text-right">
+    <v-col
+      class="font-weight-bold text-center text-md-right pa-1 mt-1 mt-sm-0"
+      cols="12"
+      sm="3"
+      md="2"
+    >
+      <div class="d-md-none">Стоимость:</div>
       <app-formatted-price
         :price="product.cartTotalPrice"
       ></app-formatted-price>
-    </div>
-  </div>
+    </v-col>
+  </v-row>
 </template>
 
 <script lang="ts">
@@ -73,33 +85,39 @@ export default defineComponent({
   setup() {
     const cartStore = useCartStore();
 
-    return { cartStore };
+    function updateQuantityProduct(
+      product: CartProduct,
+      quantity: number | Event
+    ): void {
+      if (typeof quantity === "number") {
+        cartStore.addProduct(product, quantity, true);
+      } else {
+        cartStore.addProduct(
+          product,
+          +(quantity.target as HTMLInputElement).value,
+          true
+        );
+      }
+    }
+
+    return { cartStore, updateQuantityProduct };
   },
 });
 </script>
 
-<style lang="scss">
-.cart {
-  &__row {
+<style lang="scss" scoped>
+.cart-row {
+  border-bottom: 1px solid #ccc;
+
+  &:first-child {
     border-top: 1px solid #ccc;
-    padding: 0 0.7rem;
+  }
+  &:hover {
+    background: #f7f7f7;
+  }
 
-    &:hover {
-      background: #f7f7f7;
-    }
-  }
-  &__image {
-    width: 140px;
-  }
   &__quantity {
-    max-width: 150px;
-
-    & input[type="text"] {
-      background: #fff;
-    }
-  }
-  &__price {
-    min-width: 100px;
+    max-width: 200px;
   }
 }
 </style>
