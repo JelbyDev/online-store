@@ -1,6 +1,6 @@
 import { Product } from "@/types";
 import products from "@/assets/moks/products";
-import { PRODUCTS_PER_PAGE, API_RESPONSE_DELAY } from "@/assets/moks/constants";
+import { PRODUCTS_PER_PAGE, DELAY_API_RESPONSE } from "@/assets/moks/constants";
 
 interface filterElements {
   ids?: number[];
@@ -23,7 +23,7 @@ export function getProductRequest(
 ): Promise<GetProductResponse> {
   return new Promise((resolve) => {
     const product = products.find((product) => product.id === productId);
-    setTimeout(() => resolve(product), API_RESPONSE_DELAY);
+    setTimeout(() => resolve(product), DELAY_API_RESPONSE);
   });
 }
 
@@ -34,7 +34,9 @@ export function getProductsRequest(
   filters: filterElements = {}
 ): Promise<GetProductsResponse> {
   return new Promise((resolve) => {
-    const searchedProducts = searchProducts(search, products);
+    const sortedProducts = sortProducts(sort, products);
+
+    const searchedProducts = searchProducts(search, sortedProducts);
     const filteredProducts = filterProducts(filters, searchedProducts);
 
     const totalPages = Math.ceil(filteredProducts.length / PRODUCTS_PER_PAGE);
@@ -45,15 +47,13 @@ export function getProductsRequest(
       !!filters.ids
     );
 
-    const sortedProducts = sortProducts(sort, limitedProducts);
-
     setTimeout(
       () =>
         resolve({
           totalPages: totalPages,
-          products: sortedProducts,
+          products: limitedProducts,
         }),
-      API_RESPONSE_DELAY
+      DELAY_API_RESPONSE
     );
   });
 }
@@ -71,7 +71,9 @@ function limitProducts(
 
 function searchProducts(searchQuery: string, products: Product[]): Product[] {
   if (!searchQuery) return [...products];
-  return products.filter((product) => product.name.includes(searchQuery));
+  return products.filter((product) =>
+    product.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 }
 
 function filterProducts(

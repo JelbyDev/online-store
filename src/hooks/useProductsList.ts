@@ -6,11 +6,12 @@ import {
 } from "@/types";
 import { Ref, ref, watch, onMounted } from "vue";
 import { getProducts } from "@/api/Product";
+import { DELAY_WHEN_WATCH_TEXT_FIELD } from "@/config/variables";
 
 import FILTERING_ELEMENTS from "@/assets/moks/filters";
 import SORTING_ELEMENTS from "@/assets/moks/sorts";
 
-export function useProductsList(filters?: SelectedFilters) {
+export function useProductsList(defaultFilters?: SelectedFilters) {
   const products: Ref<Product[]> = ref([]);
   const isLoadingProducts: Ref<boolean> = ref(false);
 
@@ -20,11 +21,13 @@ export function useProductsList(filters?: SelectedFilters) {
   const sortingElements: SortingElement[] = SORTING_ELEMENTS;
   const filteringElements: FilteringElements = FILTERING_ELEMENTS;
 
-  const defaultSelectedSorting = sortingElements[0]?.value ?? "";
+  const defaultSelectedSorting = sortingElements[0]?.value || "";
   const selectedSorting: Ref<string> = ref(defaultSelectedSorting);
+
+  const timeoutWhenWatch = { searchQuery: 0, selectedFilters: 0 };
   const searchQuery: Ref<string> = ref("");
-  const selectedFilters: Ref<SelectedFilters> = filters
-    ? ref({ ...filters })
+  const selectedFilters: Ref<SelectedFilters> = defaultFilters
+    ? ref({ ...defaultFilters })
     : ref({});
 
   function loadProducts() {
@@ -43,19 +46,30 @@ export function useProductsList(filters?: SelectedFilters) {
       .finally(() => (isLoadingProducts.value = false));
   }
 
-  watch(currentPage, () => loadProducts());
+  function resetCurrentPage(): void {
+    const oldCurrentPage = currentPage.value;
+    currentPage.value = 1;
+    if (oldCurrentPage === 1) {
+      loadProducts();
+    }
+  }
 
-  watch(
-    [searchQuery, selectedSorting, selectedFilters],
-    () => {
-      const oldCurrentPage = currentPage.value;
-      currentPage.value = 1;
-      if (oldCurrentPage === 1) {
-        loadProducts();
-      }
-    },
-    { deep: true }
-  );
+  function initTimeoutWhenWatch(
+    watchName: "searchQuery" | "selectedFilters"
+  ): void {
+    clearTimeout(timeoutWhenWatch[watchName]);
+    timeoutWhenWatch[watchName] = setTimeout(
+      () => resetCurrentPage(),
+      DELAY_WHEN_WATCH_TEXT_FIELD
+    );
+  }
+
+  watch(currentPage, () => loadProducts());
+  watch(selectedSorting, () => resetCurrentPage());
+  watch(searchQuery, () => initTimeoutWhenWatch("searchQuery"));
+  watch(selectedFilters, () => initTimeoutWhenWatch("selectedFilters"), {
+    deep: true,
+  });
 
   onMounted(() => {
     loadProducts();

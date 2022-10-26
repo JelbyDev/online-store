@@ -8,9 +8,7 @@ export const useCartStore = defineStore("cart", () => {
   const products: Ref<CartProduct[]> = ref([]);
   const isCartLoading: Ref<boolean> = ref(false);
 
-  loadProductsFromStorage();
-
-  function loadProductsFromStorage(): void | boolean {
+  (function loadProductsFromStorage(): void | boolean {
     const storageProducts = getItemFromStorage("cartProducts");
     const storageParsedProducts: OrderProduct[] = storageProducts
       ? JSON.parse(storageProducts)
@@ -31,6 +29,20 @@ export const useCartStore = defineStore("cart", () => {
         });
       })
       .finally(() => (isCartLoading.value = false));
+  })();
+
+  function createProduct(product: Product, quantity: number): void {
+    products.value.push({
+      ...product,
+      cartQuantity: quantity,
+      cartTotalPrice: product.price * quantity,
+    });
+  }
+
+  function updateProduct(product: CartProduct, quantity: number) {
+    if (quantity > product.quantity) quantity = product.quantity;
+    product.cartQuantity = quantity;
+    product.cartTotalPrice = product.price * product.cartQuantity;
   }
 
   function addProduct(
@@ -47,20 +59,6 @@ export const useCartStore = defineStore("cart", () => {
       if (!updateQuantity) quantity += foundProductInCart.cartQuantity;
       updateProduct(foundProductInCart, quantity);
     }
-  }
-
-  function createProduct(product: Product, quantity: number): void {
-    products.value.push({
-      ...product,
-      cartQuantity: quantity,
-      cartTotalPrice: product.price * quantity,
-    });
-  }
-
-  function updateProduct(product: CartProduct, quantity: number) {
-    if (quantity > product.quantity) quantity = product.quantity;
-    product.cartQuantity = quantity;
-    product.cartTotalPrice = product.price * product.cartQuantity;
   }
 
   function removeProduct(productId: number): void {

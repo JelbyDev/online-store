@@ -15,7 +15,7 @@
       </v-col>
       <v-col cols="12" sm="7" md="8">
         <v-text-field
-          v-model.lazy.trim="searchQuery"
+          v-model.trim="searchQuery"
           label="Поиск по названию товара"
           variant="outlined"
           clearable
@@ -57,7 +57,7 @@
 import { defineComponent } from "vue";
 import { useProductsList } from "@/hooks/useProductsList";
 import ProductsList from "@/components/ProductsList.vue";
-import ProductsFilter from "../components/ProductsFilter.vue";
+import ProductsFilter from "@/components/ProductsFilter.vue";
 
 export default defineComponent({
   components: { ProductsList, ProductsFilter },
