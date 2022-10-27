@@ -69,6 +69,7 @@
 
         <v-btn
           @click="updateQuantityProduct(product, product.cartQuantity + 1)"
+          :disabled="product.cartExceedingQuantity"
           icon="mdi-plus"
           size="x-small"
           color="info"
