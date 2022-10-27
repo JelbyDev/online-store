@@ -45,14 +45,8 @@ export default defineComponent({
   setup() {
     const route = useRoute();
     const productId = +route.params.id;
-    const { product, isLoadingProduct } = useProductSingle(productId);
-
-    const optionsList = [
-      { title: "Категория", value: product.value.category },
-      { title: "Размер", value: product.value.size },
-      { title: "Цвет", value: product.value.color },
-      { title: "В наличии", value: product.value.quantity },
-    ];
+    const { product, optionsList, isLoadingProduct } =
+      useProductSingle(productId);
 
     return {
       product,

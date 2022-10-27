@@ -7,7 +7,13 @@
       v-bind="props"
       class="rounded-lg"
     >
-      <v-img :src="product.img" height="270" position="center center" cover>
+      <v-img
+        :src="product.img"
+        :alt="product.name"
+        height="270"
+        position="center center"
+        cover
+      >
         <v-overlay
           :model-value="isHovering"
           class="align-center justify-center"

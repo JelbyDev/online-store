@@ -16,6 +16,11 @@ export interface CartProduct extends Product {
   cartTotalPrice: number;
 }
 
+export interface ProductOption {
+  title: string;
+  value: string | number;
+}
+
 export interface Customer {
   firstName: string;
   email: string;

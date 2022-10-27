@@ -1,21 +1,24 @@
 <template>
-  <tbody v-if="options.length" density="compact">
-    <tr v-for="(option, index) in options" :key="index">
-      <td>
-        <strong>{{ option.title }}:</strong>
-      </td>
-      <td>{{ option.value }}</td>
-    </tr>
-  </tbody>
+  <v-table v-if="options.length" density="compact">
+    <tbody>
+      <tr v-for="(option, index) in options" :key="index">
+        <td>
+          <strong>{{ option.title }}:</strong>
+        </td>
+        <td>{{ option.value }}</td>
+      </tr>
+    </tbody>
+  </v-table>
 </template>
 
 <script lang="ts">
+import { ProductOption } from "@/types";
 import { defineComponent, PropType } from "vue";
 
 export default defineComponent({
   props: {
     options: {
-      type: Array as PropType<{ title: string; value: string | number }[]>,
+      type: Array as PropType<ProductOption[]>,
       required: true,
     },
   },

@@ -13,7 +13,12 @@
     </v-col>
 
     <v-col class="pa-1" cols="12" sm="3" md="2">
-      <v-img :src="product.img" height="130" position="center center"></v-img>
+      <v-img
+        :src="product.img"
+        :alt="product.name"
+        height="130"
+        position="center center"
+      ></v-img>
     </v-col>
 
     <v-col
@@ -22,7 +27,13 @@
       sm="8"
       md="auto"
     >
-      {{ product.name }}
+      <router-link
+        class="cart-row__name text-h6"
+        :to="`/product/${product.id}`"
+      >
+        {{ product.name }}
+      </router-link>
+
       <div class="text-caption">В наличии: {{ product.quantity }} шт.</div>
     </v-col>
 
@@ -114,6 +125,14 @@ export default defineComponent({
   }
   &:hover {
     background: #f7f7f7;
+  }
+
+  &__name {
+    color: #000;
+
+    &:hover {
+      text-decoration: none;
+    }
   }
 
   &__quantity {
