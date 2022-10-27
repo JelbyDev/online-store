@@ -1,4 +1,4 @@
-# Jelby market (online-store)
+# Jelby market (online-store) - [деплой проекта](https://jelbydev.github.io/online-store/#/)
 
 ## Требования к проекту
 
