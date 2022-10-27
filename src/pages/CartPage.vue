@@ -6,11 +6,11 @@
       <v-alert
         v-if="cartStore.isExceedingProductQuantity"
         type="warning"
-        variant="tonal"
+        variant="outlined"
         class="mb-3"
         prominent
       >
-        К сожалению отмеченных товаров нет в необходимом количестве на наших
+        К сожалению, отмеченных товаров нет в необходимом количестве на наших
         складах. Укажите другое количество или удалите товар, чтобы сделать
         заказ.
       </v-alert>
