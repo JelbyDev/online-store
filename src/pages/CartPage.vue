@@ -2,9 +2,28 @@
   <div>
     <app-page-title>Корзина товаров</app-page-title>
 
+    <v-scroll-x-transition group>
+      <v-alert
+        v-if="cartStore.isExceedingProductQuantity"
+        type="warning"
+        variant="tonal"
+        class="mb-3"
+        prominent
+      >
+        К сожалению отмеченных товаров нет в необходимом количестве на наших
+        складах. Укажите другое количество или удалите товар, чтобы сделать
+        заказ.
+      </v-alert>
+    </v-scroll-x-transition>
+
     <cart-products-list>
       <template #orderFormButton>
-        <v-btn @click="showOrderForm" color="info" size="large">
+        <v-btn
+          @click="showOrderForm"
+          :disabled="cartStore.isExceedingProductQuantity"
+          color="info"
+          size="large"
+        >
           Сделать заказ
         </v-btn>
       </template>

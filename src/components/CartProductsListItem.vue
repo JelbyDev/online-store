@@ -34,7 +34,17 @@
         {{ product.name }}
       </router-link>
 
-      <div class="text-caption">В наличии: {{ product.quantity }} шт.</div>
+      <div class="text-caption">На складе: {{ product.quantity }} шт.</div>
+
+      <v-alert
+        v-if="product.cartExceedingQuantity"
+        type="warning"
+        variant="tonal"
+        density="compact"
+        class="d-inline-flex"
+      >
+        Не хватает на складе
+      </v-alert>
     </v-col>
 
     <v-col cols="12" sm="auto" class="text-center pa-1 mt-1 mt-sm-0">
@@ -118,17 +128,14 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .cart-row {
-  border-bottom: 1px solid #ccc;
+  border-bottom: 1px solid rgba(var(--v-theme-on-background), 0.3);
 
   &:first-child {
-    border-top: 1px solid #ccc;
-  }
-  &:hover {
-    background: #f7f7f7;
+    border-top: 1px solid rgba(var(--v-theme-on-background), 0.3);
   }
 
   &__name {
-    color: #000;
+    color: rgb(var(--v-theme-on-background));
 
     &:hover {
       text-decoration: none;

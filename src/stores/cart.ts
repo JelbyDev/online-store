@@ -32,15 +32,21 @@ export const useCartStore = defineStore("cart", () => {
   })();
 
   function createProduct(product: Product, quantity: number): void {
+    const cartExceedingQuantity = quantity > product.quantity;
     products.value.push({
       ...product,
       cartQuantity: quantity,
       cartTotalPrice: product.price * quantity,
+      cartExceedingQuantity,
     });
   }
 
   function updateProduct(product: CartProduct, quantity: number) {
-    if (quantity > product.quantity) quantity = product.quantity;
+    if (quantity > product.quantity) {
+      product.cartExceedingQuantity = true;
+    } else {
+      product.cartExceedingQuantity = false;
+    }
     product.cartQuantity = quantity;
     product.cartTotalPrice = product.price * product.cartQuantity;
   }
@@ -72,8 +78,7 @@ export const useCartStore = defineStore("cart", () => {
   }
 
   const getProducts: ComputedRef<CartProduct[]> = computed(() => {
-    const productsToString = JSON.stringify(products.value);
-    return JSON.parse(productsToString);
+    return [...products.value];
   });
 
   const getProductsForOrder: ComputedRef<OrderProduct[]> = computed(() => {
@@ -105,6 +110,17 @@ export const useCartStore = defineStore("cart", () => {
     return isCartLoading.value;
   });
 
+  const isExceedingProductQuantity: ComputedRef<boolean> = computed(() => {
+    if (
+      products.value.find(
+        (product: CartProduct) => product.cartExceedingQuantity
+      )
+    ) {
+      return true;
+    }
+    return false;
+  });
+
   function isInCart(productId: number): boolean {
     if (getProduct(productId)) return true;
     return false;
@@ -133,6 +149,7 @@ export const useCartStore = defineStore("cart", () => {
     getTotals,
     getIsCartLoading,
     isInCart,
+    isExceedingProductQuantity,
     clearProducts,
   };
 });

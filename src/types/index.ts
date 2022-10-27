@@ -14,6 +14,7 @@ export interface Product {
 export interface CartProduct extends Product {
   cartQuantity: number;
   cartTotalPrice: number;
+  cartExceedingQuantity: boolean;
 }
 
 export interface ProductOption {
