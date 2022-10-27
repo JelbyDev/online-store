@@ -8,7 +8,7 @@
           variant="text"
           href="https://github.com/JelbyDev/online-store"
         >
-          JelbyDev
+          Online-store
         </v-btn>
       </div>
 
