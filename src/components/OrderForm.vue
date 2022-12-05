@@ -58,7 +58,7 @@
 <script lang="ts">
 import { OrderProduct } from "@/types/index";
 import { defineComponent, PropType } from "vue";
-import { useOrderForm } from "@/hooks/useOrderForm";
+import { useOrderForm } from "@/composables/useOrderForm";
 import OrderFormResponseView from "./OrderFormResponseView.vue";
 
 export default defineComponent({

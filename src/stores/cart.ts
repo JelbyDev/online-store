@@ -1,6 +1,6 @@
-import { Product, CartProduct, OrderProduct } from "@/types";
+import { Product, CartProduct, OrderProduct, CartTotals } from "@/types";
 import { defineStore } from "pinia";
-import { Ref, ref, ComputedRef, computed, watch } from "vue";
+import { Ref, ref, ComputedRef, computed, watch, onMounted } from "vue";
 import { getProducts as getProductsFromApi } from "@/api/Product";
 import { setItemInStorage, getItemFromStorage } from "@/utils/storage";
 
@@ -8,7 +8,7 @@ export const useCartStore = defineStore("cart", () => {
   const products: Ref<CartProduct[]> = ref([]);
   const isCartLoading: Ref<boolean> = ref(false);
 
-  (function loadProductsFromStorage(): void | boolean {
+  function loadProductsFromStorage(): void | boolean {
     const storageProducts = getItemFromStorage("cartProducts");
     const storageParsedProducts: OrderProduct[] = storageProducts
       ? JSON.parse(storageProducts)
@@ -29,7 +29,7 @@ export const useCartStore = defineStore("cart", () => {
         });
       })
       .finally(() => (isCartLoading.value = false));
-  })();
+  }
 
   function createProduct(product: Product, quantity: number): void {
     const cartExceedingQuantity = quantity > product.quantity;
@@ -69,12 +69,16 @@ export const useCartStore = defineStore("cart", () => {
 
   function removeProduct(productId: number): void {
     products.value = [
-      ...products.value.filter((product) => product.id !== productId),
+      ...products.value.filter(
+        (product: CartProduct) => product.id !== productId
+      ),
     ];
   }
 
   function getProduct(productId: number): CartProduct | undefined {
-    return products.value.find((product) => product.id === productId);
+    return products.value.find(
+      (product: CartProduct) => product.id === productId
+    );
   }
 
   const getProducts: ComputedRef<CartProduct[]> = computed(() => {
@@ -82,29 +86,30 @@ export const useCartStore = defineStore("cart", () => {
   });
 
   const getProductsForOrder: ComputedRef<OrderProduct[]> = computed(() => {
-    return products.value.reduce((orderProducts, product) => {
-      orderProducts.push({
-        id: product.id,
-        quantity: product.cartQuantity,
-      });
-      return orderProducts;
-    }, [] as OrderProduct[]);
+    return products.value.reduce(
+      (orderProducts: OrderProduct[], product: CartProduct) => {
+        orderProducts.push({
+          id: product.id,
+          quantity: product.cartQuantity,
+        });
+        return orderProducts;
+      },
+      []
+    );
   });
 
-  const getTotals: ComputedRef<{ quantity: number; price: number }> = computed(
-    () => {
-      if (products.value.length === 0) return { quantity: 0, price: 0 };
-      return products.value.reduce(
-        (totals, product) => {
-          return {
-            quantity: totals.quantity + product.cartQuantity,
-            price: totals.price + product.cartTotalPrice,
-          };
-        },
-        { quantity: 0, price: 0 }
-      );
-    }
-  );
+  const getTotals: ComputedRef<CartTotals> = computed(() => {
+    if (products.value.length === 0) return { quantity: 0, price: 0 };
+    return products.value.reduce(
+      (totals: CartTotals, product: CartProduct) => {
+        return {
+          quantity: totals.quantity + product.cartQuantity,
+          price: totals.price + product.cartTotalPrice,
+        };
+      },
+      { quantity: 0, price: 0 }
+    );
+  });
 
   const getIsCartLoading: ComputedRef<boolean> = computed(() => {
     return isCartLoading.value;
@@ -140,6 +145,10 @@ export const useCartStore = defineStore("cart", () => {
     },
     { deep: true }
   );
+
+  onMounted(() => {
+    loadProductsFromStorage();
+  });
 
   return {
     addProduct,

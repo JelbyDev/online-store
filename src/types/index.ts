@@ -17,6 +17,11 @@ export interface CartProduct extends Product {
   cartExceedingQuantity: boolean;
 }
 
+export interface CartTotals {
+  quantity: number;
+  price: number;
+}
+
 export interface ProductOption {
   title: string;
   value: string | number;

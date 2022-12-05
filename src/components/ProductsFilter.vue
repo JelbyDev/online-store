@@ -53,7 +53,7 @@
 <script lang="ts">
 import { FilteringElements, SelectedFilters } from "@/types";
 import { defineComponent, PropType, Ref, ref, watch } from "vue";
-import { useProductsFilter } from "@/hooks/useProductsFilter";
+import { useProductsFilter } from "@/composables/useProductsFilter";
 
 export default defineComponent({
   props: {

@@ -55,7 +55,7 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { useProductsList } from "@/hooks/useProductsList";
+import { useProductsList } from "@/composables/useProductsList";
 import ProductsList from "@/components/ProductsList.vue";
 import ProductsFilter from "@/components/ProductsFilter.vue";
 

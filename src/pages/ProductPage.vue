@@ -33,7 +33,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import { useRoute } from "vue-router";
-import { useProductSingle } from "@/hooks/useProductSingle";
+import { useProductSingle } from "@/composables/useProductSingle";
 import ProductOptions from "@/components/ProductOptions.vue";
 import ProductCartBlock from "@/components/ProductCartBlock.vue";
 

@@ -3,7 +3,7 @@ import {
   GetProductResponse,
   getProductsRequest,
   getProductRequest,
-} from "@/assets/moks/requestProductApi";
+} from "@/moks/requestProductApi";
 
 export function getProducts(
   page = 1,

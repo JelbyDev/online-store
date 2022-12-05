@@ -15,7 +15,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import { useWishlistStore } from "@/stores/wishlist";
-import { useProductsList } from "@/hooks/useProductsList";
+import { useProductsList } from "@/composables/useProductsList";
 import ProductsList from "@/components/ProductsList.vue";
 
 export default defineComponent({

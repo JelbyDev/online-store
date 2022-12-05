@@ -8,8 +8,8 @@ import { Ref, ref, watch, onMounted } from "vue";
 import { getProducts } from "@/api/Product";
 import { DELAY_WHEN_WATCH_TEXT_FIELD } from "@/config/variables";
 
-import FILTERING_ELEMENTS from "@/assets/moks/filters";
-import SORTING_ELEMENTS from "@/assets/moks/sorts";
+import FILTERING_ELEMENTS from "@/moks/filters";
+import SORTING_ELEMENTS from "@/moks/sorts";
 
 export function useProductsList(defaultFilters?: SelectedFilters) {
   const products: Ref<Product[]> = ref([]);
@@ -24,7 +24,7 @@ export function useProductsList(defaultFilters?: SelectedFilters) {
   const defaultSelectedSorting = sortingElements[0]?.value || "";
   const selectedSorting: Ref<string> = ref(defaultSelectedSorting);
 
-  const timeoutWhenWatch = { searchQuery: 0, selectedFilters: 0 };
+  const debounceTimers = { searchQuery: 0, selectedFilters: 0 };
   const searchQuery: Ref<string> = ref("");
   const selectedFilters: Ref<SelectedFilters> = defaultFilters
     ? ref({ ...defaultFilters })
@@ -54,11 +54,9 @@ export function useProductsList(defaultFilters?: SelectedFilters) {
     }
   }
 
-  function initTimeoutWhenWatch(
-    watchName: "searchQuery" | "selectedFilters"
-  ): void {
-    clearTimeout(timeoutWhenWatch[watchName]);
-    timeoutWhenWatch[watchName] = setTimeout(
+  function setDebounce(watchName: "searchQuery" | "selectedFilters"): void {
+    clearTimeout(debounceTimers[watchName]);
+    debounceTimers[watchName] = setTimeout(
       () => resetCurrentPage(),
       DELAY_WHEN_WATCH_TEXT_FIELD
     );
@@ -66,8 +64,8 @@ export function useProductsList(defaultFilters?: SelectedFilters) {
 
   watch(currentPage, () => loadProducts());
   watch(selectedSorting, () => resetCurrentPage());
-  watch(searchQuery, () => initTimeoutWhenWatch("searchQuery"));
-  watch(selectedFilters, () => initTimeoutWhenWatch("selectedFilters"), {
+  watch(searchQuery, () => setDebounce("searchQuery"));
+  watch(selectedFilters, () => setDebounce("selectedFilters"), {
     deep: true,
   });
 

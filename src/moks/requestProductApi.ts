@@ -1,6 +1,6 @@
 import { Product } from "@/types";
-import products from "@/assets/moks/products";
-import { PRODUCTS_PER_PAGE, DELAY_API_RESPONSE } from "@/assets/moks/constants";
+import products from "@/moks/products";
+import { PRODUCTS_PER_PAGE, DELAY_API_RESPONSE } from "@/moks/constants";
 
 interface filterElements {
   ids?: number[];
