@@ -1,1 +1,1 @@
-export const DELAY_WHEN_WATCH_TEXT_FIELD = 700;
+export const DEBOUNCE_DELAY = 700;

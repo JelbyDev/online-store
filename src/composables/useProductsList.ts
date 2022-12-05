@@ -6,7 +6,7 @@ import {
 } from "@/types";
 import { Ref, ref, watch, onMounted } from "vue";
 import { getProducts } from "@/api/Product";
-import { DELAY_WHEN_WATCH_TEXT_FIELD } from "@/config/variables";
+import { DEBOUNCE_DELAY } from "@/config/variables";
 
 import FILTERING_ELEMENTS from "@/moks/filters";
 import SORTING_ELEMENTS from "@/moks/sorts";
@@ -58,7 +58,7 @@ export function useProductsList(defaultFilters?: SelectedFilters) {
     clearTimeout(debounceTimers[watchName]);
     debounceTimers[watchName] = setTimeout(
       () => resetCurrentPage(),
-      DELAY_WHEN_WATCH_TEXT_FIELD
+      DEBOUNCE_DELAY
     );
   }
 
