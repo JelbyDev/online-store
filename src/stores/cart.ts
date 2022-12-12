@@ -1,33 +1,20 @@
 import { Product, CartProduct, OrderProduct, CartTotals } from "@/types";
 import { defineStore } from "pinia";
 import { Ref, ref, ComputedRef, computed, watch, onMounted } from "vue";
-import { getProducts as getProductsFromApi } from "@/api/Product";
-import { setItemInStorage, getItemFromStorage } from "@/utils/storage";
+import { getProducts as getProductsFromApi } from "@/api/Cart";
+import { setItemInStorage } from "@/utils/storage";
 
 export const useCartStore = defineStore("cart", () => {
   const products: Ref<CartProduct[]> = ref([]);
   const isCartLoading: Ref<boolean> = ref(false);
 
-  function loadProductsFromStorage(): void | boolean {
-    const storageProducts = getItemFromStorage("cartProducts");
-    const storageParsedProducts: OrderProduct[] = storageProducts
-      ? JSON.parse(storageProducts)
-      : [];
-    if (!storageParsedProducts.length) return false;
-
+  function loadProducts(): void {
     isCartLoading.value = true;
-    const productsId = storageParsedProducts.map((product) => product.id);
-    getProductsFromApi(undefined, undefined, undefined, {
-      ids: productsId,
-    })
-      .then((response) => {
-        response.products.forEach((product) => {
-          const storageProduct = storageParsedProducts.find(
-            (stProduct) => stProduct.id === product.id
-          );
-          if (storageProduct) addProduct(product, storageProduct.quantity);
-        });
+    getProductsFromApi()
+      .then((responseProducts) => {
+        products.value = [...responseProducts];
       })
+      .catch((err) => console.log(err))
       .finally(() => (isCartLoading.value = false));
   }
 
@@ -147,7 +134,7 @@ export const useCartStore = defineStore("cart", () => {
   );
 
   onMounted(() => {
-    loadProductsFromStorage();
+    loadProducts();
   });
 
   return {
