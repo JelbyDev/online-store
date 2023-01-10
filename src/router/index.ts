@@ -1,35 +1,30 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
-import CatalogPage from "@/pages/CatalogPage.vue";
-import WishlistPage from "@/pages/WishlistPage.vue";
-import CartPage from "@/pages/CartPage.vue";
-import ProductPage from "@/pages/ProductPage.vue";
-import NotFoundPage from "@/pages/NotFoundPage.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: "",
     name: "catalog",
-    component: CatalogPage,
+    component: () => import("@/pages/CatalogPage.vue"),
   },
   {
     path: "/wishlist",
     name: "wishlist",
-    component: WishlistPage,
+    component: () => import("@/pages/WishlistPage.vue"),
   },
   {
     path: "/cart",
     name: "cart",
-    component: CartPage,
+    component: () => import("@/pages/CartPage.vue"),
   },
   {
     path: "/product/:id",
     name: "product",
-    component: ProductPage,
+    component: () => import("@/pages/ProductPage.vue"),
   },
   {
     path: "/:catchAll(.*)",
     name: "not-found",
-    component: NotFoundPage,
+    component: () => import("@/pages/NotFoundPage.vue"),
   },
 ];
 
