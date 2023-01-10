@@ -1,3 +1,8 @@
+<script setup lang="ts">
+import TheFooter from "@/components/TheFooter.vue";
+import TheHeader from "@/components/TheHeader.vue";
+</script>
+
 <template>
   <v-app>
     <the-header></the-header>
@@ -11,17 +16,6 @@
     <the-footer></the-footer>
   </v-app>
 </template>
-
-<script lang="ts">
-import { defineComponent } from "vue";
-
-import TheFooter from "@/components/TheFooter.vue";
-import TheHeader from "@/components/TheHeader.vue";
-
-export default defineComponent({
-  components: { TheFooter, TheHeader },
-});
-</script>
 
 <style lang="scss">
 .v-container {

@@ -1,3 +1,27 @@
+<script setup lang="ts">
+import { Product } from "@/types";
+import { defineProps, withDefaults } from "vue";
+import ProductsListItem from "@/components/ProductsListItem.vue";
+
+withDefaults(
+  defineProps<{
+    products: Product[];
+    isLoadingProducts?: boolean;
+    gridCools?: number;
+    gridSm?: number;
+    gridMd?: number;
+    gridLg?: number;
+  }>(),
+  {
+    isLoadingProducts: false,
+    gridCools: 0,
+    gridSm: 0,
+    gridMd: 0,
+    gridLg: 0,
+  }
+);
+</script>
+
 <template>
   <div
     class="product-list"
@@ -22,42 +46,6 @@
     </app-no-products-text>
   </div>
 </template>
-
-<script lang="ts">
-import { Product } from "@/types";
-import { defineComponent, PropType } from "vue";
-import ProductsListItem from "@/components/ProductsListItem.vue";
-
-export default defineComponent({
-  components: { ProductsListItem },
-  props: {
-    products: {
-      type: Object as PropType<Product[]>,
-      required: true,
-    },
-    isLoadingProducts: {
-      type: Boolean,
-      default: false,
-    },
-    gridCools: {
-      type: Number,
-      default: 0,
-    },
-    gridSm: {
-      type: Number,
-      default: 0,
-    },
-    gridMd: {
-      type: Number,
-      default: 0,
-    },
-    gridLg: {
-      type: Number,
-      default: 0,
-    },
-  },
-});
-</script>
 
 <style lang="scss" scoped>
 .product-list {

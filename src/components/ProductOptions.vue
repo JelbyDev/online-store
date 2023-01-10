@@ -1,3 +1,12 @@
+<script setup lang="ts">
+import { ProductOption } from "@/types";
+import { defineProps } from "vue";
+
+defineProps<{
+  options: ProductOption[];
+}>();
+</script>
+
 <template>
   <v-table v-if="options.length" density="compact">
     <tbody>
@@ -10,17 +19,4 @@
     </tbody>
   </v-table>
 </template>
-
-<script lang="ts">
-import { ProductOption } from "@/types";
-import { defineComponent, PropType } from "vue";
-
-export default defineComponent({
-  props: {
-    options: {
-      type: Array as PropType<ProductOption[]>,
-      required: true,
-    },
-  },
-});
-</script>
+>

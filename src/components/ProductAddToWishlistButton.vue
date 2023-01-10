@@ -1,3 +1,20 @@
+<script setup lang="ts">
+import { defineProps, withDefaults } from "vue";
+import { useWishlistStore } from "@/stores/wishlist";
+
+withDefaults(
+  defineProps<{
+    productId: number;
+    size?: string;
+  }>(),
+  {
+    size: "small",
+  }
+);
+
+const wishlistStore = useWishlistStore();
+</script>
+
 <template>
   <v-btn
     @click="wishlistStore.toggleProduct(productId)"
@@ -9,25 +26,3 @@
     icon="mdi-heart"
   ></v-btn>
 </template>
-
-<script lang="ts">
-import { defineComponent } from "vue";
-import { useWishlistStore } from "@/stores/wishlist";
-
-export default defineComponent({
-  props: {
-    productId: {
-      type: Number,
-      required: true,
-    },
-    size: {
-      type: String,
-      default: "small",
-    },
-  },
-  setup() {
-    const wishlistStore = useWishlistStore();
-    return { wishlistStore };
-  },
-});
-</script>

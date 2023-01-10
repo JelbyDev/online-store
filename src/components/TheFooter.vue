@@ -1,3 +1,7 @@
+<script setup lang="ts">
+const technologyList = ["Vue 3", "Vuetify", "VueRouter", "Pinia", "TypeScript"];
+</script>
+
 <template>
   <v-footer app absolute color="footerBg">
     <v-container class="pa-1">
@@ -26,21 +30,3 @@
     </v-container>
   </v-footer>
 </template>
-
-<script lang="ts">
-import { defineComponent } from "vue";
-
-export default defineComponent({
-  setup() {
-    const technologyList = [
-      "Vue 3",
-      "Vuetify",
-      "VueRouter",
-      "Pinia",
-      "TypeScript",
-    ];
-
-    return { technologyList };
-  },
-});
-</script>

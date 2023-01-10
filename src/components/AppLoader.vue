@@ -1,16 +1,3 @@
-<template>
-  <div
-    v-if="isLoading"
-    class="progress-circular-container d-flex justify-center align-center"
-  >
-    <v-progress-circular
-      :size="50"
-      color="info"
-      indeterminate
-    ></v-progress-circular>
-  </div>
-</template>
-
 <script lang="ts">
 import { defineComponent } from "vue";
 
@@ -24,6 +11,19 @@ export default defineComponent({
   },
 });
 </script>
+
+<template>
+  <div
+    v-if="isLoading"
+    class="progress-circular-container d-flex justify-center align-center"
+  >
+    <v-progress-circular
+      :size="50"
+      color="info"
+      indeterminate
+    ></v-progress-circular>
+  </div>
+</template>
 
 <style lang="scss" scoped>
 .progress-circular-container {

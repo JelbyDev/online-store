@@ -1,3 +1,11 @@
+<script setup lang="ts">
+import { useCartStore } from "@/stores/cart";
+import { useWishlistStore } from "@/stores/wishlist";
+
+const cartStore = useCartStore();
+const wishlistStore = useWishlistStore();
+</script>
+
 <template>
   <v-app-bar color="headerBg">
     <v-container>
@@ -36,21 +44,3 @@
     </v-container>
   </v-app-bar>
 </template>
-
-<script lang="ts">
-import { defineComponent } from "vue";
-import { useCartStore } from "@/stores/cart";
-import { useWishlistStore } from "@/stores/wishlist";
-
-export default defineComponent({
-  setup() {
-    const cartStore = useCartStore();
-    const wishlistStore = useWishlistStore();
-
-    return {
-      cartStore,
-      wishlistStore,
-    };
-  },
-});
-</script>

@@ -1,7 +1,3 @@
-<template>
-  <span>{{ formattedPrice(price) }}</span>
-</template>
-
 <script lang="ts">
 import { defineComponent } from "vue";
 
@@ -21,7 +17,12 @@ export default defineComponent({
         maximumFractionDigits: 0,
       });
     }
+
     return { formattedPrice };
   },
 });
 </script>
+
+<template>
+  <span>{{ formattedPrice(price) }}</span>
+</template>

@@ -1,3 +1,13 @@
+<script setup lang="ts">
+import { useRoute } from "vue-router";
+import { useProductSingle } from "@/composables/useProductSingle";
+import ProductOptions from "@/components/ProductOptions.vue";
+import ProductCartBlock from "@/components/ProductCartBlock.vue";
+
+const { id: productId } = useRoute().params;
+const { product, optionsList, isLoadingProduct } = useProductSingle(+productId);
+</script>
+
 <template>
   <div>
     <app-loader :is-loading="isLoadingProduct"></app-loader>
@@ -29,30 +39,3 @@
     </div>
   </div>
 </template>
-
-<script lang="ts">
-import { defineComponent } from "vue";
-import { useRoute } from "vue-router";
-import { useProductSingle } from "@/composables/useProductSingle";
-import ProductOptions from "@/components/ProductOptions.vue";
-import ProductCartBlock from "@/components/ProductCartBlock.vue";
-
-export default defineComponent({
-  components: {
-    ProductOptions,
-    ProductCartBlock,
-  },
-  setup() {
-    const route = useRoute();
-    const productId = +route.params.id;
-    const { product, optionsList, isLoadingProduct } =
-      useProductSingle(productId);
-
-    return {
-      product,
-      isLoadingProduct,
-      optionsList,
-    };
-  },
-});
-</script>

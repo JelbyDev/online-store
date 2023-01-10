@@ -1,3 +1,23 @@
+<script setup lang="ts">
+import { OrderProduct } from "@/types/index";
+import { defineProps } from "vue";
+import { useOrderForm } from "@/composables/useOrderForm";
+import OrderFormResponseView from "./OrderFormResponseView.vue";
+
+const props = defineProps<{
+  products: OrderProduct[];
+}>();
+
+const {
+  isFormValid,
+  isFormSending,
+  customer,
+  customerRules,
+  sendForm,
+  responseSending,
+} = useOrderForm(props.products);
+</script>
+
 <template>
   <v-sheet class="order-form w-100 px-10 py-7 align-self-center">
     <template v-if="responseSending === null">
@@ -54,39 +74,3 @@
     </order-form-response-view>
   </v-sheet>
 </template>
-
-<script lang="ts">
-import { OrderProduct } from "@/types/index";
-import { defineComponent, PropType } from "vue";
-import { useOrderForm } from "@/composables/useOrderForm";
-import OrderFormResponseView from "./OrderFormResponseView.vue";
-
-export default defineComponent({
-  components: { OrderFormResponseView },
-  props: {
-    products: {
-      type: Array as PropType<OrderProduct[]>,
-      required: true,
-    },
-  },
-  setup(props) {
-    const {
-      isFormValid,
-      isFormSending,
-      customer,
-      customerRules,
-      sendForm,
-      responseSending,
-    } = useOrderForm(props.products);
-
-    return {
-      isFormValid,
-      isFormSending,
-      customer,
-      customerRules,
-      sendForm,
-      responseSending,
-    };
-  },
-});
-</script>

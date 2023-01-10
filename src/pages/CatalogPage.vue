@@ -1,3 +1,21 @@
+<script setup lang="ts">
+import { useProductsList } from "@/composables/useProductsList";
+import ProductsList from "@/components/ProductsList.vue";
+import ProductsFilter from "@/components/ProductsFilter.vue";
+
+const {
+  products,
+  isLoadingProducts,
+  currentPage,
+  totalPages,
+  sortingElements,
+  filteringElements,
+  searchQuery,
+  selectedSorting,
+  selectedFilters,
+} = useProductsList();
+</script>
+
 <template>
   <div>
     <app-page-title>Каталог</app-page-title>
@@ -52,39 +70,3 @@
     </v-row>
   </div>
 </template>
-
-<script lang="ts">
-import { defineComponent } from "vue";
-import { useProductsList } from "@/composables/useProductsList";
-import ProductsList from "@/components/ProductsList.vue";
-import ProductsFilter from "@/components/ProductsFilter.vue";
-
-export default defineComponent({
-  components: { ProductsList, ProductsFilter },
-  setup() {
-    const {
-      products,
-      isLoadingProducts,
-      currentPage,
-      totalPages,
-      sortingElements,
-      filteringElements,
-      searchQuery,
-      selectedSorting,
-      selectedFilters,
-    } = useProductsList();
-
-    return {
-      products,
-      isLoadingProducts,
-      searchQuery,
-      sortingElements,
-      selectedSorting,
-      selectedFilters,
-      filteringElements,
-      currentPage,
-      totalPages,
-    };
-  },
-});
-</script>

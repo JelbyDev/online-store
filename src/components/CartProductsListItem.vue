@@ -1,3 +1,30 @@
+<script setup lang="ts">
+import { CartProduct } from "@/types";
+import { defineProps } from "vue";
+import { useCartStore } from "@/stores/cart";
+
+defineProps<{
+  product: CartProduct;
+}>();
+
+const cartStore = useCartStore();
+
+function updateQuantityProduct(
+  product: CartProduct,
+  quantity: number | Event
+): void {
+  if (typeof quantity === "number") {
+    cartStore.addProduct(product, quantity, true);
+  } else {
+    cartStore.addProduct(
+      product,
+      +(quantity.target as HTMLInputElement).value,
+      true
+    );
+  }
+}
+</script>
+
 <template>
   <v-row
     class="cart-row d-flex align-center justify-center flex-wrap py-2 px-3"
@@ -91,41 +118,6 @@
     </v-col>
   </v-row>
 </template>
-
-<script lang="ts">
-import { CartProduct } from "@/types";
-import { defineComponent, PropType } from "vue";
-import { useCartStore } from "@/stores/cart";
-
-export default defineComponent({
-  props: {
-    product: {
-      type: Object as PropType<CartProduct>,
-      required: true,
-    },
-  },
-  setup() {
-    const cartStore = useCartStore();
-
-    function updateQuantityProduct(
-      product: CartProduct,
-      quantity: number | Event
-    ): void {
-      if (typeof quantity === "number") {
-        cartStore.addProduct(product, quantity, true);
-      } else {
-        cartStore.addProduct(
-          product,
-          +(quantity.target as HTMLInputElement).value,
-          true
-        );
-      }
-    }
-
-    return { cartStore, updateQuantityProduct };
-  },
-});
-</script>
 
 <style lang="scss" scoped>
 .cart-row {

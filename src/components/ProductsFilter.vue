@@ -1,3 +1,25 @@
+<script setup lang="ts">
+import { FilteringElements, SelectedFilters } from "@/types";
+import { defineProps, defineEmits, Ref, ref, watch } from "vue";
+import { useProductsFilter } from "@/composables/useProductsFilter";
+
+const props = defineProps<{
+  modelValue: SelectedFilters;
+  filteringElements: FilteringElements;
+}>();
+
+const emits = defineEmits<{
+  (e: "update:modelValue", value: SelectedFilters): void;
+}>();
+
+const filterPanelState: Ref<number[]> = ref([0]);
+const { selectedFilters } = useProductsFilter(props.filteringElements);
+
+watch(selectedFilters, () => {
+  emits("update:modelValue", selectedFilters);
+});
+</script>
+
 <template>
   <v-expansion-panels v-model="filterPanelState" variant="accordion" multiple>
     <v-expansion-panel
@@ -49,38 +71,3 @@
     </v-expansion-panel>
   </v-expansion-panels>
 </template>
-
-<script lang="ts">
-import { FilteringElements, SelectedFilters } from "@/types";
-import { defineComponent, PropType, Ref, ref, watch } from "vue";
-import { useProductsFilter } from "@/composables/useProductsFilter";
-
-export default defineComponent({
-  props: {
-    modelValue: {
-      type: Object as PropType<SelectedFilters>,
-      required: true,
-    },
-    filteringElements: {
-      type: Object as PropType<FilteringElements>,
-      required: true,
-    },
-  },
-  emits: {
-    "update:modelValue": (value: SelectedFilters) => value as SelectedFilters,
-  },
-  setup(props, { emit }) {
-    const filterPanelState: Ref<number[]> = ref([0]);
-    const { selectedFilters } = useProductsFilter(props.filteringElements);
-
-    watch(selectedFilters, () => {
-      emit("update:modelValue", selectedFilters);
-    });
-
-    return {
-      filterPanelState,
-      selectedFilters,
-    };
-  },
-});
-</script>

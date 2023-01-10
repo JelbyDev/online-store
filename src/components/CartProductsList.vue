@@ -1,3 +1,10 @@
+<script setup lang="ts">
+import { useCartStore } from "@/stores/cart";
+import CartProductsListItem from "@/components/CartProductsListItem.vue";
+
+const cartStore = useCartStore();
+</script>
+
 <template>
   <div>
     <app-loader :is-loading="cartStore.getIsCartLoading"></app-loader>
@@ -32,21 +39,6 @@
     </app-no-products-text>
   </div>
 </template>
-
-<script lang="ts">
-import { defineComponent } from "vue";
-import { useCartStore } from "@/stores/cart";
-import CartProductsListItem from "@/components/CartProductsListItem.vue";
-
-export default defineComponent({
-  components: { CartProductsListItem },
-  setup() {
-    const cartStore = useCartStore();
-
-    return { cartStore };
-  },
-});
-</script>
 
 <style>
 .slide-fade-enter-active {

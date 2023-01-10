@@ -1,3 +1,17 @@
+<script setup lang="ts">
+import { Ref, ref } from "vue";
+import { useCartStore } from "@/stores/cart";
+import CartProductsList from "@/components/CartProductsList.vue";
+import OrderForm from "@/components/OrderForm.vue";
+
+const cartStore = useCartStore();
+const isOrderFormVisible: Ref<boolean> = ref(false);
+
+function showOrderForm() {
+  isOrderFormVisible.value = true;
+}
+</script>
+
 <template>
   <div>
     <app-page-title>Корзина товаров</app-page-title>
@@ -34,24 +48,3 @@
     </v-dialog>
   </div>
 </template>
-
-<script lang="ts">
-import { defineComponent, Ref, ref } from "vue";
-import { useCartStore } from "@/stores/cart";
-import CartProductsList from "@/components/CartProductsList.vue";
-import OrderForm from "@/components/OrderForm.vue";
-
-export default defineComponent({
-  components: { OrderForm, CartProductsList },
-  setup() {
-    const cartStore = useCartStore();
-    const isOrderFormVisible: Ref<boolean> = ref(false);
-
-    function showOrderForm() {
-      isOrderFormVisible.value = true;
-    }
-
-    return { cartStore, isOrderFormVisible, showOrderForm };
-  },
-});
-</script>

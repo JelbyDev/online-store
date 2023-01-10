@@ -1,3 +1,14 @@
+<script setup lang="ts">
+import { useWishlistStore } from "@/stores/wishlist";
+import { useProductsList } from "@/composables/useProductsList";
+import ProductsList from "@/components/ProductsList.vue";
+
+const wishlistStore = useWishlistStore();
+const { products, isLoadingProducts } = useProductsList({
+  ids: wishlistStore.getProductsId,
+});
+</script>
+
 <template>
   <div>
     <app-page-title>Избранные товары</app-page-title>
@@ -11,25 +22,3 @@
     ></products-list>
   </div>
 </template>
-
-<script lang="ts">
-import { defineComponent } from "vue";
-import { useWishlistStore } from "@/stores/wishlist";
-import { useProductsList } from "@/composables/useProductsList";
-import ProductsList from "@/components/ProductsList.vue";
-
-export default defineComponent({
-  components: { ProductsList },
-  setup() {
-    const wishlistStore = useWishlistStore();
-    const { products, isLoadingProducts } = useProductsList({
-      ids: wishlistStore.getProductsId,
-    });
-
-    return {
-      products,
-      isLoadingProducts,
-    };
-  },
-});
-</script>
